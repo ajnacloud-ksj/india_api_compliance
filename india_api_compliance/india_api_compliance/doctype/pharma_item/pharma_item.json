@@ -1,0 +1,159 @@
+{
+ "actions": [],
+ "autoname": "field:pharma_item_code",
+ "creation": "2023-10-18 14:49:05.693749",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "product_identifier_section",
+  "pharma_item_code",
+  "product_description",
+  "column_break_frwyg",
+  "pharma_item_name",
+  "product_details_section",
+  "unique_product_code",
+  "ndc_number",
+  "caution",
+  "ref_label_number",
+  "column_break_9yvxa",
+  "cas_number",
+  "manufacturing_license_number",
+  "storage_condition",
+  "ref_label_revision_number",
+  "brand_details_section",
+  "brand_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "product_identifier_section",
+   "fieldtype": "Section Break",
+   "label": "Product Identifier"
+  },
+  {
+   "fieldname": "pharma_item_code",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Pharma Item Code",
+   "length": 200,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "product_description",
+   "fieldtype": "Small Text",
+   "label": "Product Description"
+  },
+  {
+   "fieldname": "column_break_frwyg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pharma_item_name",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Pharma Item Name",
+   "length": 200,
+   "reqd": 1
+  },
+  {
+   "fieldname": "product_details_section",
+   "fieldtype": "Section Break",
+   "label": "Product Details"
+  },
+  {
+   "fieldname": "unique_product_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Unique Product Code",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ndc_number",
+   "fieldtype": "Data",
+   "label": "NDC Number"
+  },
+  {
+   "fieldname": "caution",
+   "fieldtype": "Small Text",
+   "label": "Caution"
+  },
+  {
+   "fieldname": "ref_label_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Ref Label Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_9yvxa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cas_number",
+   "fieldtype": "Data",
+   "label": "CAS Number"
+  },
+  {
+   "fieldname": "manufacturing_license_number",
+   "fieldtype": "Data",
+   "label": "Manufacturing License Number"
+  },
+  {
+   "fieldname": "storage_condition",
+   "fieldtype": "Small Text",
+   "label": "Storage Condition",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ref_label_revision_number",
+   "fieldtype": "Data",
+   "label": "Ref Label Revision Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "brand_details_section",
+   "fieldtype": "Section Break",
+   "label": "Brand Details"
+  },
+  {
+   "fieldname": "brand_name",
+   "fieldtype": "Data",
+   "label": "Brand Name"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-10-18 14:51:55.969669",
+ "modified_by": "Administrator",
+ "module": "India Api Compliance",
+ "name": "Pharma Item",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,351 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2023-10-18 13:32:05.525927",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "product_details_section",
+  "product_type",
+  "product_code",
+  "section_break_hxb5k",
+  "product_name",
+  "upc_number",
+  "special_storage_condition",
+  "column_break_uw1yf",
+  "brand_name",
+  "ndc_number",
+  "caution",
+  "column_break_fi6ot",
+  "name_of_api",
+  "cas_number",
+  "notes",
+  "batch_details_section",
+  "batch_number",
+  "batch_size",
+  "number_of_containers",
+  "column_break_hxsij",
+  "date_format",
+  "date_of_manufacturing",
+  "column_break_matgg",
+  "date_type",
+  "date_of_expiry_or_retest",
+  "manufacturing_site_details_section",
+  "manufacturing_unit",
+  "unit_value",
+  "manufacturing_unit_address",
+  "column_break_b5oul",
+  "name_of_manufacturer",
+  "manufacturing_license_number",
+  "additional_details_section",
+  "country_of_origin",
+  "label_number",
+  "column_break_lllco",
+  "dispatch_quantity",
+  "label_revision_number",
+  "section_break_odoht",
+  "sscc_details",
+  "naming_series",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "product_details_section",
+   "fieldtype": "Section Break",
+   "label": "Product Details"
+  },
+  {
+   "default": "Manufacturer",
+   "fieldname": "product_type",
+   "fieldtype": "Select",
+   "label": "Product Type",
+   "options": "Manufacturer\nNeutral\nPallet",
+   "reqd": 1
+  },
+  {
+   "fieldname": "product_code",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Product Code",
+   "length": 200,
+   "options": "Pharma Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_hxb5k",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "product_code.pharma_item_name",
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Product Name",
+   "length": 200,
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "product_code.unique_product_code",
+   "fieldname": "upc_number",
+   "fieldtype": "Data",
+   "label": "UPC Number",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "product_code.storage_condition",
+   "fieldname": "special_storage_condition",
+   "fieldtype": "Small Text",
+   "label": "Special Storage Condition",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_uw1yf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "product_code.brand_name",
+   "fieldname": "brand_name",
+   "fieldtype": "Data",
+   "label": "Brand Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "product_code.ndc_number",
+   "fieldname": "ndc_number",
+   "fieldtype": "Data",
+   "label": "NDC Number",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "product_code.caution",
+   "fieldname": "caution",
+   "fieldtype": "Small Text",
+   "label": "Caution",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_fi6ot",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "product_code.pharma_item_name",
+   "fieldname": "name_of_api",
+   "fieldtype": "Data",
+   "label": "Name Of API",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "product_code.cas_number",
+   "fieldname": "cas_number",
+   "fieldtype": "Data",
+   "label": "CAS Number",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes",
+   "read_only": 1
+  },
+  {
+   "fieldname": "batch_details_section",
+   "fieldtype": "Section Break",
+   "label": "Batch Details"
+  },
+  {
+   "fieldname": "batch_number",
+   "fieldtype": "Data",
+   "label": "Batch Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "batch_size",
+   "fieldtype": "Data",
+   "label": "Batch Size",
+   "reqd": 1
+  },
+  {
+   "fieldname": "number_of_containers",
+   "fieldtype": "Int",
+   "label": "Number Of Containers",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_hxsij",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_format",
+   "fieldtype": "Select",
+   "label": "Date Format",
+   "options": "MMM YYYY\nMMM-YYYY\ndd-mm-YYYY\ndd/mm/YYYY"
+  },
+  {
+   "fieldname": "date_of_manufacturing",
+   "fieldtype": "Date",
+   "label": "Date Of Manufacturing",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_matgg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_type",
+   "fieldtype": "Select",
+   "label": "Date Type",
+   "options": "Expiry\nRetest",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date_of_expiry_or_retest",
+   "fieldtype": "Date",
+   "label": "Date Of Expiry Or Retest",
+   "reqd": 1
+  },
+  {
+   "fieldname": "manufacturing_site_details_section",
+   "fieldtype": "Section Break",
+   "label": "Manufacturing Site Details"
+  },
+  {
+   "fieldname": "manufacturing_unit",
+   "fieldtype": "Link",
+   "label": "Manufacturing Unit",
+   "options": "Pharma Unit Address",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "manufacturing_unit.unit_address",
+   "fieldname": "manufacturing_unit_address",
+   "fieldtype": "Data",
+   "label": "Manufacturing Unit Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_b5oul",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "manufacturing_unit.company",
+   "fieldname": "name_of_manufacturer",
+   "fieldtype": "Data",
+   "label": "Name Of Manufacturer",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "manufacturing_unit.manufacturing_license_number",
+   "fieldname": "manufacturing_license_number",
+   "fieldtype": "Data",
+   "label": "Manufacturing License Number",
+   "read_only": 1
+  },
+  {
+   "fieldname": "additional_details_section",
+   "fieldtype": "Section Break",
+   "label": "Additional Details"
+  },
+  {
+   "fieldname": "country_of_origin",
+   "fieldtype": "Data",
+   "label": "Country Of Origin"
+  },
+  {
+   "fetch_from": "product_code.ref_label_number",
+   "fieldname": "label_number",
+   "fieldtype": "Data",
+   "label": "Label Number",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_lllco",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dispatch_quantity",
+   "fieldtype": "Data",
+   "label": "Dispatch Quantity"
+  },
+  {
+   "fetch_from": "product_code.ref_label_revision_number",
+   "fieldname": "label_revision_number",
+   "fieldtype": "Data",
+   "label": "Label Revision Number",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_odoht",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "sscc_details",
+   "fieldtype": "Table",
+   "label": "SSCC Details",
+   "options": "Pharma SSCC Item"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "QR-.####"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Pharma API QR Code",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fetch_from": "manufacturing_unit.unit_value",
+   "fieldname": "unit_value",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Unit Value"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2023-10-18 15:38:58.850917",
+ "modified_by": "Administrator",
+ "module": "India Api Compliance",
+ "name": "Pharma API QR Code",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
+}

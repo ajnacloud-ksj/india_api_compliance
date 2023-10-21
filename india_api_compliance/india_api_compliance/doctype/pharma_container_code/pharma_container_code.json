@@ -1,0 +1,84 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2023-10-18 11:41:12.115188",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "barcode",
+  "gs1_company_prefix",
+  "status",
+  "sscc",
+  "check_digit",
+  "unit_value"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "00.{unit_value}.{gs1_company_prefix}.####.{check_digit}"
+  },
+  {
+   "fieldname": "barcode",
+   "fieldtype": "Barcode",
+   "label": "Barcode"
+  },
+  {
+   "default": "1234567891",
+   "fieldname": "gs1_company_prefix",
+   "fieldtype": "Data",
+   "label": "GS1 Company Prefix"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Not Used\nUsed"
+  },
+  {
+   "fieldname": "sscc",
+   "fieldtype": "Data",
+   "label": "SSCC"
+  },
+  {
+   "fieldname": "check_digit",
+   "fieldtype": "Data",
+   "label": "Check Digit"
+  },
+  {
+   "fieldname": "unit_value",
+   "fieldtype": "Data",
+   "label": "Unit Value"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-10-18 15:16:27.287646",
+ "modified_by": "Administrator",
+ "module": "India Api Compliance",
+ "name": "Pharma Container Code",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
