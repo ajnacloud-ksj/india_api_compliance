@@ -49,7 +49,8 @@
   "section_break_odoht",
   "sscc_details",
   "naming_series",
-  "amended_from"
+  "amended_from",
+  "workflow_state"
  ],
  "fields": [
   {
@@ -317,12 +318,18 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Unit Value"
+  },
+  {
+   "fieldname": "workflow_state",
+   "fieldtype": "Link",
+   "label": "Workflow State",
+   "options": "Workflow State"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-10-18 15:38:58.850917",
+ "modified": "2023-10-21 11:34:44.750126",
  "modified_by": "Administrator",
  "module": "India Api Compliance",
  "name": "Pharma API QR Code",
