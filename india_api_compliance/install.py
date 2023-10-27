@@ -1,7 +1,5 @@
 import frappe
-from frappe.desk.page.setup_wizard.setup_wizard import add_all_roles_to
 import logging
-from frappe.core.doctype.permission_rule.permission_rule import remove_permission
 # Set up a logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)  # Set this to the desired level
