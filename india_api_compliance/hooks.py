@@ -215,3 +215,9 @@ app_license = "MIT"
 # auth_hooks = [
 #	"india_api_compliance.auth.validate"
 # ]
+
+jinja = {
+    "methods": [
+        "india_api_compliance.utils.generate_qr_base64"
+    ]
+}

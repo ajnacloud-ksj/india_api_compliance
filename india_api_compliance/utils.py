@@ -6,6 +6,7 @@ from io import BytesIO
 
 @frappe.whitelist()
 def generate_qr_base64(data):
+    logging.info(f"Received the data {data}")
     qr = pyqrcode.create(data)
     stream = BytesIO()
     qr.png(stream, scale=5)
