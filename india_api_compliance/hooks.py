@@ -221,3 +221,7 @@ jinja = {
         "india_api_compliance.utils.generate_qr_base64"
     ]
 }
+
+before_uninstall = "india_api_compliance.install.before_uninstall"
+
+after_install = "india_api_compliance.install.after_install"
