@@ -41,13 +41,9 @@ def set_permissions():
 
 def before_uninstall():
     # Cleanup roles and permissions
-    remove_permissions()
+    #remove_permissions()
     remove_roles()
 
-def remove_permissions():
-    doctype = 'Pharma API QR Code'
-    for role in roles:
-       remove_permission(doctype, role)
 
 def remove_roles():
     roles = ["QA User", "QA Reviewer", "QA Approver"]
