@@ -33,9 +33,19 @@ def set_permissions():
     doctype = 'Pharma API QR Code'
 
     # Example permissions, adjust as required
-    frappe.permissions.add_permission(doctype, 'QA User', read=1, write=1)
-    frappe.permissions.add_permission(doctype, 'QA Reviewer', read=1, write=1)
-    frappe.permissions.add_permission(doctype, 'QA Approver', read=1, write=1, submit=1)
+   # For QA User
+    frappe.permissions.add_permission(doctype, 'QA User', ptype='read')
+    frappe.permissions.add_permission(doctype, 'QA User', ptype='write')
+
+    # For QA Reviewer
+    frappe.permissions.add_permission(doctype, 'QA Reviewer', ptype='read')
+    frappe.permissions.add_permission(doctype, 'QA Reviewer', ptype='write')
+
+    # For QA Approver
+    frappe.permissions.add_permission(doctype, 'QA Approver', ptype='read')
+    frappe.permissions.add_permission(doctype, 'QA Approver', ptype='write')
+    frappe.permissions.add_permission(doctype, 'QA Approver', ptype='submit')
+
 
 def before_uninstall():
     # Cleanup roles and permissions
