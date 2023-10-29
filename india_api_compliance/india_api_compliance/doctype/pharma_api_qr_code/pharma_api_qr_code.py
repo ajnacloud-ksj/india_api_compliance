@@ -12,6 +12,19 @@ from india_api_compliance.utils import get_app_config
 
 api_url = get_app_config("client_api_url")
 
+def capture_and_store_in_s3(qrcodeDocument):
+    
+
+
+    payload = {
+
+
+    }
+
+
+
+    pass 
+
 
 class PharmaAPIQRCode(Document):
     def validate(self):
@@ -43,7 +56,7 @@ class PharmaAPIQRCode(Document):
         if self.date_of_expiry_or_retest < self.date_of_manufacturing:
             frappe.throw('Date of Expiration should not be less than Date of Manufacturing')
 
-            
+
     def on_submit(self):
         for i in self.sscc_details:
             if i.net_weight == 0.0:
