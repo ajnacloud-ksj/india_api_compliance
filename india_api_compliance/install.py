@@ -14,6 +14,17 @@ if not logger.hasHandlers():
 
 roles = ["QA User", "QA Reviewer", "QA Approver"]
 
+def remove_custom_print_formats():
+    # Define a list of print formats that need to be removed
+    print_formats_to_remove = ["API QRCode STD"]  # Add your print format names here
+
+    for pf in print_formats_to_remove:
+        # Check if the print format exists
+        if frappe.db.exists("Print Format", pf):
+            # Delete the print format
+            frappe.delete_doc("Print Format", pf)
+
+
 
 def after_install():
     # Create roles and set permissions
@@ -51,6 +62,7 @@ def before_uninstall():
     # Cleanup roles and permissions
     #remove_permissions()
     remove_roles()
+    remove_custom_print_formats()
 
 
 def remove_roles():

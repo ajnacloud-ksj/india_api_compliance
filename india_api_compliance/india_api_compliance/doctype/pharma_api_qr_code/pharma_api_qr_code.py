@@ -8,6 +8,11 @@ import pyqrcode
 import png
 import sys, os,shutil
 
+from india_api_compliance.utils import get_app_config
+
+api_url = get_app_config("client_api_url")
+
+
 class PharmaAPIQRCode(Document):
     def validate(self):
         if int(self.number_of_containers) >= 500:
@@ -38,6 +43,7 @@ class PharmaAPIQRCode(Document):
         if self.date_of_expiry_or_retest < self.date_of_manufacturing:
             frappe.throw('Date of Expiration should not be less than Date of Manufacturing')
 
+            
     def on_submit(self):
         for i in self.sscc_details:
             if i.net_weight == 0.0:
@@ -54,6 +60,7 @@ class PharmaAPIQRCode(Document):
             import re
 
             site_name = local.site
+
 
             url = pyqrcode.create(f'https://i2mcdf76y2.execute-api.ap-south-1.amazonaws.com/dev/ajnaerpsearchapi?id={self.name}&site_name={site_name}&sscc={i.container_code}')
 
