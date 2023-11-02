@@ -3,6 +3,7 @@ import logging
 import pyqrcode
 import base64
 from io import BytesIO
+import boto3
 
 @frappe.whitelist()
 def generate_qr_base64(data):
@@ -24,3 +25,17 @@ def get_app_config(key=None):
         return None
 
 
+def get_s3_client_local():
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id='your_access_key_id',
+        aws_secret_access_key='your_secret_access_key',
+        region_name='your_region'
+    )
+    return s3_client
+
+
+def extract_fields(doc, fields):
+    """Extract the specified fields from the document"""
+    data = {field: doc.get(field) for field in fields}
+    return data

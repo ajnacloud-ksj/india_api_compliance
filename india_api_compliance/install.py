@@ -61,7 +61,7 @@ def set_permissions():
 def before_uninstall():
     # Cleanup roles and permissions
     #remove_permissions()
-    remove_roles()
+    #remove_roles()
     remove_custom_print_formats()
 
 

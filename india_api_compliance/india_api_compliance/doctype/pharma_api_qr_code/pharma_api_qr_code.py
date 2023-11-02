@@ -7,14 +7,20 @@ from frappe import local
 import pyqrcode
 import png
 import sys, os,shutil
+import boto3
 
-from india_api_compliance.utils import get_app_config
+from india_api_compliance.utils import get_app_config,extract_fields
 
 api_url = get_app_config("client_api_url")
 
+
+def get_s3_client():
+    s3_client = boto3.client('s3')
+    return s3_client
+
+
 def capture_and_store_in_s3(qrcodeDocument):
     
-
 
     payload = {
 
@@ -74,9 +80,17 @@ class PharmaAPIQRCode(Document):
 
             site_name = local.site
 
+            qr_code_mandatory_fields_string =  get_app_config(key='qr_code_mandatory_fields') 
+            qr_code_custom_fields_string =  get_app_config(key='qr_code_custom_fields') 
 
+            qr_code_mandatory_fields = [field.strip() for field in qr_code_mandatory_fields_string.split(',')]
+            qr_code_custom_fields = [field.strip() for field in qr_code_custom_fields_string.split(',')]
+
+            extract_qr_fields = extract_fields(doc="Pharma API QR Code", fields= qr_code_custom_fields + qr_code_custom_fields)
+            
+            print(extract_fields)
+            '''
             url = pyqrcode.create(f'https://i2mcdf76y2.execute-api.ap-south-1.amazonaws.com/dev/ajnaerpsearchapi?id={self.name}&site_name={site_name}&sscc={i.container_code}')
-
             cwd = os.getcwd()
             url.png(f'{fname}.png', scale = 6)
             src_path = os.path.join(cwd,  f'{fname}.png')
@@ -89,6 +103,7 @@ class PharmaAPIQRCode(Document):
             doc.save()
             frappe.db.set_value(i.doctype,i.name,{"qr_code":doc.file_url})
             i.qr_code = doc.file_url
+            '''
             frappe.db.commit()
 
     def on_cancel(self):

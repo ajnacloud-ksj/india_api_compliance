@@ -1,0 +1,81 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-10-29 03:35:38.060181",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "qr_code_search_url",
+  "qrcode_column_break_column",
+  "s3_qrcode_bucket",
+  "s3_qrcode_prefix",
+  "qrcode_display_field_configuration_section",
+  "qr_code_mandatory_fields",
+  "qr_code_custom_fields"
+ ],
+ "fields": [
+  {
+   "default": "https://search.ajna.cloud/ajnaerpsearchapi",
+   "fieldname": "qr_code_search_url",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "QR Code Search URL",
+   "reqd": 1
+  },
+  {
+   "default": "ajnacloud-data-prod",
+   "fieldname": "s3_qrcode_bucket",
+   "fieldtype": "Data",
+   "label": "S3 QRCode Bucket"
+  },
+  {
+   "default": "india_api_qrcode",
+   "fieldname": "s3_qrcode_prefix",
+   "fieldtype": "Data",
+   "label": "S3 QRCode Prefix"
+  },
+  {
+   "fieldname": "qrcode_display_field_configuration_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "qr_code_mandatory_fields",
+   "fieldtype": "Data",
+   "label": "QRCode Mandatatoryfields"
+  },
+  {
+   "fieldname": "qr_code_custom_fields",
+   "fieldtype": "Data",
+   "label": "QRCode Custom Fields"
+  },
+  {
+   "fieldname": "qrcode_column_break_column",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2023-11-02 02:08:33.860002",
+ "modified_by": "Administrator",
+ "module": "India Api Compliance",
+ "name": "App Configuration",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
