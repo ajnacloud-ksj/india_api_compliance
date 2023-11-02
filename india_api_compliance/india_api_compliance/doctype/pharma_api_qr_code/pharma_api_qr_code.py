@@ -86,9 +86,9 @@ class PharmaAPIQRCode(Document):
             qr_code_mandatory_fields = [field.strip() for field in qr_code_mandatory_fields_string.split(',')]
             qr_code_custom_fields = [field.strip() for field in qr_code_custom_fields_string.split(',')]
 
-            extract_qr_fields = extract_fields(doc="Pharma API QR Code", fields= qr_code_custom_fields + qr_code_custom_fields)
+            extract_qr_fields = extract_fields(doc=self, fields= qr_code_mandatory_fields + qr_code_custom_fields)
             
-            print(extract_fields)
+            print(extract_qr_fields)
             '''
             url = pyqrcode.create(f'https://i2mcdf76y2.execute-api.ap-south-1.amazonaws.com/dev/ajnaerpsearchapi?id={self.name}&site_name={site_name}&sscc={i.container_code}')
             cwd = os.getcwd()
