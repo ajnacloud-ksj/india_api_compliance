@@ -24,7 +24,7 @@ bench set-redis-socketio-host redis:6379
 sed -i '/redis/d' ./Procfile
 sed -i '/watch/d' ./Procfile
 
-bench get-app https://github.com/ajnacloud-ksj/india_api_compliance.git
+bench get-app git@github.com:ajnacloud-ksj/india_api_compliance.git
 
 bench new-site ajna.localhost \
 --force \
