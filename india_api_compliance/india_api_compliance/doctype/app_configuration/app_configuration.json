@@ -7,55 +7,58 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-    "qr_code_search_url",
-    "qrcode_column_break_column",
-    "s3_qrcode_bucket",
-    "s3_qrcode_prefix",
-    "qrcode_display_field_configuration_section",
-    "qr_code_mandatory_fields",
-    "qr_code_custom_fields"
+  "qr_code_search_url",
+  "qrcode_column_break_column",
+  "s3_qrcode_bucket",
+  "s3_qrcode_prefix",
+  "qrcode_display_field_configuration_section",
+  "qr_code_mandatory_fields",
+  "qr_code_custom_fields"
  ],
- "fields": [{
-    "default": "https://search.ajna.cloud/ajnaerpsearchapi",
-    "fieldname": "qr_code_search_url",
-    "fieldtype": "Data",
-    "in_list_view": 1,
-    "label": "QR Code Search URL",
-    "reqd": 1
+ "fields": [
+  {
+   "default": "https://search.ajna.cloud/ajnaerpsearchapi",
+   "fieldname": "qr_code_search_url",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "QR Code Search URL",
+   "reqd": 1
   },
   {
-    "default": "ajnacloud-data-prod",
-    "fieldname": "s3_qrcode_bucket",
-    "fieldtype": "Data",
-    "label": "S3 QRCode Bucket"
+   "default": "ajnacloud-data-prod",
+   "fieldname": "s3_qrcode_bucket",
+   "fieldtype": "Data",
+   "label": "S3 QRCode Bucket"
   },
   {
-    "default": "india_api_qrcode",
-    "fieldname": "s3_qrcode_prefix",
-    "fieldtype": "Data",
-    "label": "S3 QRCode Prefix"
+   "default": "india_api_qrcode",
+   "fieldname": "s3_qrcode_prefix",
+   "fieldtype": "Data",
+   "label": "S3 QRCode Prefix"
   },
   {
-    "fieldname": "qrcode_display_field_configuration_section",
-    "fieldtype": "Section Break"
+   "fieldname": "qrcode_display_field_configuration_section",
+   "fieldtype": "Section Break"
   },
   {
-    "fieldname": "qr_code_mandatory_fields",
-    "fieldtype": "Data",
-    "label": "QRCode Mandatatoryfields"
-  },{
-    "fieldname": "qr_code_custom_fields",
-    "fieldtype": "Data",
-    "label": "QRCode Custom Fields"
+   "fieldname": "qr_code_mandatory_fields",
+   "fieldtype": "Text",
+   "label": "QRCode Mandatatoryfields"
   },
   {
-    "fieldname": "qrcode_column_break_column",
-    "fieldtype": "Column Break"
-  }],
+   "fieldname": "qr_code_custom_fields",
+   "fieldtype": "Text",
+   "label": "QRCode Custom Fields"
+  },
+  {
+   "fieldname": "qrcode_column_break_column",
+   "fieldtype": "Column Break"
+  }
+ ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-11-02 03:01:06.230694",
+ "modified": "2023-11-03 02:28:58.178199",
  "modified_by": "Administrator",
  "module": "India Api Compliance",
  "name": "App Configuration",

@@ -1,0 +1,112 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-03 02:41:06.029361",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "cloud_config_tab",
+  "aws_configuration_column",
+  "search_url",
+  "s3_bucket",
+  "s3_prefix",
+  "column_break_utek",
+  "s3_access_key",
+  "s3_secret_key",
+  "scan_display_attributes_tab",
+  "mandatory_fields",
+  "custom_fields"
+ ],
+ "fields": [
+  {
+   "default": "https://search.ajna.cloud/ajnaerpsearchapi?",
+   "fieldname": "search_url",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Search URL",
+   "reqd": 1
+  },
+  {
+   "default": "ajnacloud-data-prod",
+   "fieldname": "s3_bucket",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "S3 Bucket",
+   "reqd": 1
+  },
+  {
+   "default": "india_api_qrcode",
+   "fieldname": "s3_prefix",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "S3 Prefix",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_utek",
+   "fieldtype": "Column Break",
+   "label": "Optional AWS Keys"
+  },
+  {
+   "fieldname": "s3_access_key",
+   "fieldtype": "Data",
+   "label": "S3 Access Key"
+  },
+  {
+   "fieldname": "s3_secret_key",
+   "fieldtype": "Password",
+   "label": "S3 Secret Key"
+  },
+  {
+   "fieldname": "cloud_config_tab",
+   "fieldtype": "Tab Break",
+   "label": "Cloud Config"
+  },
+  {
+   "fieldname": "scan_display_attributes_tab",
+   "fieldtype": "Tab Break",
+   "label": "Scan Display Attributes"
+  },
+  {
+   "default": "upc_number,product_name,brand_name,manufacturing_unit_address,sscc_details,special_storage_condition,",
+   "fieldname": "mandatory_fields",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Mandatory Fields",
+   "reqd": 1
+  },
+  {
+   "fieldname": "custom_fields",
+   "fieldtype": "Small Text",
+   "label": "Custom Fields"
+  },
+  {
+   "fieldname": "aws_configuration_column",
+   "fieldtype": "Column Break",
+   "label": "AWS Configuration"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2023-11-03 02:52:02.870438",
+ "modified_by": "Administrator",
+ "module": "India Api Compliance",
+ "name": "India Api Compliance Configuration",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
