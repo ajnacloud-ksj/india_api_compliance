@@ -16,7 +16,7 @@ def generate_qr_base64(data):
 def get_app_config(key=None):
     try:
         # Assuming there's only one record for App Configuration
-        config = frappe.get_doc("App Configuration", "App Configuration") 
+        config = frappe.get_doc("India Api Compliance Configuration", "India Api Compliance Configuration") 
         
         if key:
             return getattr(config, key, None)
@@ -28,9 +28,9 @@ def get_app_config(key=None):
 def get_s3_client_local():
     s3_client = boto3.client(
         's3',
-        aws_access_key_id='your_access_key_id',
-        aws_secret_access_key='your_secret_access_key',
-        region_name='your_region'
+        aws_access_key_id=get_app_config("s3_access_key"),
+        aws_secret_access_key=get_app_config("s3_secret_key"),
+        region_name='ap-south-1'
     )
     return s3_client
 
