@@ -5,29 +5,37 @@ import frappe
 from frappe.model.document import Document
 from frappe import local
 import boto3
+import json 
 
-from india_api_compliance.utils import get_app_config,extract_fields
-
-api_url = get_app_config("client_api_url")
+from india_api_compliance.utils import get_app_config,extract_fields,get_s3_client_using_access_keys
 
 
 def get_s3_client():
-    s3_client = boto3.client('s3')
-    return s3_client
+    useS3AccessKeys= get_app_config("use_access_keys")
+    if useS3AccessKeys:
+        print("Using S3 access keys to initialize the S3 client")
+        return get_s3_client_using_access_keys()
+    else: 
+        return boto3.client('s3')
+        
+        
+        
 
+def capture_and_store_in_s3(qrcodeDocument,companyname):
 
-def capture_and_store_in_s3(qrcodeDocument):
-    
+    useS3AccessKeys= get_app_config("use_access_keys")
+    s3Bucket = get_app_config("s3_bucket")
+    S3Prefix = get_app_config("s3_prefix")
+    sscc_number = qrcodeDocument['sscc_number']
+    s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
 
-    payload = {
+    s3_client = get_s3_client()
 
+    # Convert the JSON object to a string
+    json_string = json.dumps(qrcodeDocument)
 
-    }
-
-
-
-    pass 
-
+    # Upload the JSON string as a file-like object
+    s3_client.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
 
 class PharmaAPIQRCode(Document):
     def validate(self):
@@ -77,8 +85,8 @@ class PharmaAPIQRCode(Document):
 
             site_name = local.site
 
-            qr_code_mandatory_fields_string =  get_app_config(key='qr_code_mandatory_fields') 
-            qr_code_custom_fields_string =  get_app_config(key='qr_code_custom_fields') 
+            qr_code_mandatory_fields_string =  get_app_config(key='mandatory_fields') 
+            qr_code_custom_fields_string =  get_app_config(key='custom_fields') 
 
             qr_code_mandatory_fields = [field.strip() for field in qr_code_mandatory_fields_string.split(',')]
             qr_code_custom_fields = [field.strip() for field in qr_code_custom_fields_string.split(',')]
@@ -86,21 +94,6 @@ class PharmaAPIQRCode(Document):
             extract_qr_fields = extract_fields(doc=self, fields= qr_code_mandatory_fields + qr_code_custom_fields)
             
             print(extract_qr_fields)
-            '''
-            url = pyqrcode.create(f'https://i2mcdf76y2.execute-api.ap-south-1.amazonaws.com/dev/ajnaerpsearchapi?id={self.name}&site_name={site_name}&sscc={i.container_code}')
-            cwd = os.getcwd()
-            url.png(f'{fname}.png', scale = 6)
-            src_path = os.path.join(cwd,  f'{fname}.png')
-            dst_path = os.path.join(frappe.get_site_path()+'/public/files/', f'{fname}.png')
-            shutil.move(src_path, dst_path)
-            doc=frappe.new_doc('File')
-            doc.file_url=f'/files/{fname}.png'
-            doc.is_private=0
-            doc.file_size=os.path.getsize(f"{frappe.get_site_path()}/public/files/{fname}.png")
-            doc.save()
-            frappe.db.set_value(i.doctype,i.name,{"qr_code":doc.file_url})
-            i.qr_code = doc.file_url
-            '''
             frappe.db.commit()
 
     def on_cancel(self):
