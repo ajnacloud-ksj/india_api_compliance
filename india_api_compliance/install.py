@@ -29,7 +29,7 @@ def remove_custom_print_formats():
 def after_install():
     # Create roles and set permissions
     create_roles()
-    set_permissions()
+    #set_permissions()
 
 def create_roles():
     for role_name in roles:
