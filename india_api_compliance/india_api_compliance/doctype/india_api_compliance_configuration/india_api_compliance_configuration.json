@@ -13,6 +13,7 @@
   "column_break_utek",
   "s3_access_key",
   "s3_secret_key",
+  "use_access_keys",
   "scan_display_attributes_tab",
   "mandatory_fields",
   "custom_fields"
@@ -84,12 +85,18 @@
    "fieldname": "aws_configuration_column",
    "fieldtype": "Column Break",
    "label": "AWS Configuration"
+  },
+  {
+   "default": "0",
+   "fieldname": "use_access_keys",
+   "fieldtype": "Check",
+   "label": "Use Access Keys"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-11-03 02:52:02.870438",
+ "modified": "2023-11-03 03:15:30.149664",
  "modified_by": "Administrator",
  "module": "India Api Compliance",
  "name": "India Api Compliance Configuration",
