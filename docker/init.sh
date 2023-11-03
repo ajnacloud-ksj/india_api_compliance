@@ -24,6 +24,9 @@ bench set-redis-socketio-host redis:6379
 sed -i '/redis/d' ./Procfile
 sed -i '/watch/d' ./Procfile
 
+eval `ssh-agent -s`
+ssh-add ~/.ssh/parameshnalla
+
 bench get-app https://github.com/ajnacloud-ksj/india_api_compliance.git
 
 bench new-site ajna.localhost \
