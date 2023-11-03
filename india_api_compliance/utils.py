@@ -16,7 +16,7 @@ def generate_qr_base64(data):
 def get_app_config(key=None):
     try:
         # Assuming there's only one record for App Configuration
-        config = frappe.get_doc("QRCode App Configuration", "App Configuration") 
+        config = frappe.get_doc("App Configuration", "App Configuration") 
         
         if key:
             return getattr(config, key, None)
