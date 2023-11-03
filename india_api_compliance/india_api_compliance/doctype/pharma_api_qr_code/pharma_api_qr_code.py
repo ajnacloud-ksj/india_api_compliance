@@ -4,9 +4,6 @@
 import frappe
 from frappe.model.document import Document
 from frappe import local
-import pyqrcode
-import png
-import sys, os,shutil
 import boto3
 
 from india_api_compliance.utils import get_app_config,extract_fields
