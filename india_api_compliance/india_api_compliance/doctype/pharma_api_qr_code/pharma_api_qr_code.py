@@ -12,12 +12,13 @@ from india_api_compliance.utils import get_app_config,extract_fields,get_s3_clie
 
 
 
-def capture_and_store_in_s3(qrcodeDocument,companyname, s3_client):
+def capture_and_store_in_s3(qrcodeDocument,
+                            companyname,
+                            sscc_number,
+                            s3_client):
     print(qrcodeDocument)
     s3Bucket = get_app_config("s3_bucket")
     S3Prefix = get_app_config("s3_prefix")
-    sscc_number = qrcodeDocument['container_code']
-    companyname = "ajna"
     s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
     print(f"System time: {datetime.datetime.now()}")
 
@@ -131,9 +132,13 @@ class PharmaAPIQRCode(Document):
             else:
                 print("No SSCC details found.")
             for data in full_sscc_details: 
-                json_data = json.dumps(extracted_data, indent=4)
+                sscc_number = data['container_code']
+                json_data = json.dumps(data, indent=4)
                 print(json_data)
-                capture_and_store_in_s3(qrcodeDocument=json_data, companyname=site_name,s3_client=s3client)
+                capture_and_store_in_s3(qrcodeDocument=json_data, 
+                                        companyname=site_name,
+                                        sscc_number=sscc_number,
+                                        s3_client=s3client)
             frappe.db.commit()
 
     def on_cancel(self):
