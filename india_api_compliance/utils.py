@@ -18,6 +18,9 @@ def get_app_config(key=None):
         # Assuming there's only one record for App Configuration
         config = frappe.get_doc("India Api Compliance Configuration", "India Api Compliance Configuration") 
         
+        print("Configuration")
+        print(config)
+        print(f"Looking for key {key}")
         if key:
             return getattr(config, key, None)
         return config
