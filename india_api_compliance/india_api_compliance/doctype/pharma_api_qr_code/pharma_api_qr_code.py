@@ -133,7 +133,7 @@ class PharmaAPIQRCode(Document):
             for data in full_sscc_details: 
                 json_data = json.dumps(extracted_data, indent=4)
                 print(json_data)
-                capture_and_store_in_s3(qrcodeDocument=extracted_data, companyname=site_name,s3_client=s3client)
+                capture_and_store_in_s3(qrcodeDocument=json_data, companyname=site_name,s3_client=s3client)
             frappe.db.commit()
 
     def on_cancel(self):
