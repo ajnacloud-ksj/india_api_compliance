@@ -114,10 +114,15 @@ class PharmaAPIQRCode(Document):
                             "unit_of_measurement": pharmaSSCItem['unit_of_measurement']
                     }
 
-                    print(data)
-                    print(pharmaSSCItem)
+                    #print(data)
+                    #print(pharmaSSCItem)
                      # Now replace the 'sscc_details' with full details
+
+                    print("Before update")
+                    print(data)
                     data.update(extracted_data)  
+                    print("After update")
+                    print(data)
                     full_sscc_details.append(data)
         
                     # If 'item' is a dict or has a method to represent itself as a string, 'print' will work as expected.
