@@ -4,6 +4,7 @@ import pyqrcode
 import base64
 from io import BytesIO
 import boto3
+import json 
 
 @frappe.whitelist()
 def generate_qr_base64(data):
@@ -16,9 +17,9 @@ def generate_qr_base64(data):
 def get_app_config(key=None):
     try:
         # Assuming there's only one record for App Configuration
-        config = frappe.get_doc("India Api Compliance Configuration", "India Api Compliance Configuration") 
+        config = frappe.get_doc("India Api Compliance Configuration")
         
-        print("Configuration")
+        print("Fetching the config")
         print(config)
         print(f"Looking for key {key}")
         if key:
