@@ -97,6 +97,10 @@ class PharmaAPIQRCode(Document):
             # Example usage:
             extracted_data = extract_fields(doc=self, fields=qr_code_mandatory_fields + qr_code_custom_fields)
             print(extracted_data)
+            
+            for item in extracted_data['sscc_details']:
+                print(item)
+
             json_data = json.dumps(extracted_data, indent=4)
             print(json_data)
 
