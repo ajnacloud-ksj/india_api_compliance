@@ -19,16 +19,17 @@ def get_app_config(key=None):
     try:
         # Fetching the Singleton Doctype
         config = frappe.get_doc("India Api Compliance Configuration")
-        #Printing the entire config as JSON
-        #print(json.dumps(config.as_dict()))
-        if key:
+        # If the requested key is the secret key, decrypt it
+        if key == 's3_secret_key':
+            return config.get_password(fieldname=key)
+        # For other keys, return the attribute value
+        elif key:
             return getattr(config, key, None)
         # If no key is specified, return the whole config
         return config
-    except DoesNotExistError:
+    except frappe.exceptions.DoesNotExistError:
         # Return None if the Doctype does not exist
         return None
-
 
 
 def get_s3_client():
