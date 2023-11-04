@@ -12,18 +12,15 @@ from india_api_compliance.utils import get_app_config,extract_fields,get_s3_clie
 
 def get_s3_client():
     useS3AccessKeys= get_app_config("use_access_keys")
-    if useS3AccessKeys:
+    if not useS3AccessKeys:
         print("Using S3 access keys to initialize the S3 client")
         return get_s3_client_using_access_keys()
     else: 
         return boto3.client('s3')
-        
-        
-        
+               
 
 def capture_and_store_in_s3(qrcodeDocument,companyname):
 
-    useS3AccessKeys= get_app_config("use_access_keys")
     s3Bucket = get_app_config("s3_bucket")
     S3Prefix = get_app_config("s3_prefix")
     sscc_number = qrcodeDocument['sscc_number']
@@ -34,6 +31,7 @@ def capture_and_store_in_s3(qrcodeDocument,companyname):
     # Convert the JSON object to a string
     json_string = json.dumps(qrcodeDocument)
 
+    
     # Upload the JSON string as a file-like object
     s3_client.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
 
@@ -97,6 +95,7 @@ class PharmaAPIQRCode(Document):
             extract_qr_fields = extract_fields(doc=self, fields= qr_code_mandatory_fields + qr_code_custom_fields)
             
             print(extract_qr_fields)
+            capture_and_store_in_s3(qrcodeDocument=extract_qr_fields, companyname=site_name)
             frappe.db.commit()
 
     def on_cancel(self):

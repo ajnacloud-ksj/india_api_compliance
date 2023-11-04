@@ -19,11 +19,8 @@ def get_app_config(key=None):
     try:
         # Fetching the Singleton Doctype
         config = frappe.get_doc("India Api Compliance Configuration")
-        # Printing the entire config as JSON
-        print(json.dumps(config.as_dict()))
-        print("Fetching the config")
-        # If a specific key is requested, return its value
-        print(f"Looking for key {key}")
+        #Printing the entire config as JSON
+        #print(json.dumps(config.as_dict()))
         if key:
             return getattr(config, key, None)
         # If no key is specified, return the whole config
