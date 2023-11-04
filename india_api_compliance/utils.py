@@ -30,6 +30,16 @@ def get_app_config(key=None):
         return None
 
 
+
+def get_s3_client():
+    useS3AccessKeys= get_app_config("use_access_keys")
+    if useS3AccessKeys:
+        print("Using S3 access keys to initialize the S3 client")
+        return get_s3_client_using_access_keys()
+    else: 
+        return boto3.client('s3')
+               
+
 def get_s3_client_using_access_keys():
     access_key = get_app_config("s3_access_key")
     print(f"AWS Key: {access_key}")

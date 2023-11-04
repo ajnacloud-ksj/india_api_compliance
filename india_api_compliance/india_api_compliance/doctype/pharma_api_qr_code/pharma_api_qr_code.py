@@ -8,29 +8,18 @@ import boto3
 import json 
 import datetime 
 
-from india_api_compliance.utils import get_app_config,extract_fields,get_s3_client_using_access_keys
+from india_api_compliance.utils import get_app_config,extract_fields,get_s3_client
 
 
-def get_s3_client():
-    useS3AccessKeys= get_app_config("use_access_keys")
-    if useS3AccessKeys:
-        print("Using S3 access keys to initialize the S3 client")
-        return get_s3_client_using_access_keys()
-    else: 
-        return boto3.client('s3')
-               
 
-def capture_and_store_in_s3(qrcodeDocument,companyname):
+def capture_and_store_in_s3(qrcodeDocument,companyname, s3_client):
 
     s3Bucket = get_app_config("s3_bucket")
     S3Prefix = get_app_config("s3_prefix")
-    #sscc_number = qrcodeDocument['sscc_number']
-    sscc_number = '123456789'
+    sscc_number = qrcodeDocument['container_code']
     companyname = "ajna"
     s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
     print(f"System time: {datetime.datetime.now()}")
-
-    s3_client = get_s3_client()
 
     # Convert the JSON object to a string
     json_string = json.dumps(qrcodeDocument)
@@ -38,14 +27,8 @@ def capture_and_store_in_s3(qrcodeDocument,companyname):
     print(json_string)
     print(f"s3_key: {s3_key}, bucket : {s3Bucket} with data: {json_string}")
 
-    s3_client_1 = boto3.client(
-    's3',
-    aws_access_key_id='AKIA3YP74CIXLTZTIHF4',
-    aws_secret_access_key='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',
-    region_name='ap-south-1'
-)
     # Upload the JSON string as a file-like object
-    s3_client_1.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
+    s3_client.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
 
 class PharmaAPIQRCode(Document):
     def validate(self):
@@ -79,6 +62,7 @@ class PharmaAPIQRCode(Document):
 
 
     def on_submit(self):
+        s3client = get_s3_client()
         for i in self.sscc_details:
             if i.net_weight == 0.0:
                 frappe.throw(f'Net Weight at index {i.idx} could not be zero')
@@ -132,21 +116,19 @@ class PharmaAPIQRCode(Document):
 
                     print(data)
                     print(pharmaSSCItem)
+                     # Now replace the 'sscc_details' with full details
+                    data.update(extracted_data)  
                     full_sscc_details.append(data)
+        
                     # If 'item' is a dict or has a method to represent itself as a string, 'print' will work as expected.
                     # If 'item' is a complex object, you might need to format the output, like:
                     # print(item.field1, item.field2, ...)  # Replace with actual fields of 'PharmaSSCCItem'
             else:
                 print("No SSCC details found.")
-
-            # Now replace the 'sscc_details' with full details
-            extracted_data['sscc_details'] = full_sscc_details    
-
-            json_data = json.dumps(extracted_data, indent=4)
-            print(json_data)
-
-            print(extracted_data)
-            capture_and_store_in_s3(qrcodeDocument=extracted_data, companyname=site_name)
+            for data in full_sscc_details: 
+                json_data = json.dumps(extracted_data, indent=4)
+                print(json_data)
+                capture_and_store_in_s3(qrcodeDocument=extracted_data, companyname=site_name,s3_client=s3client)
             frappe.db.commit()
 
     def on_cancel(self):
