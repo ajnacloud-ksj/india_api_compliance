@@ -23,7 +23,7 @@ def capture_and_store_in_s3(qrcodeDocument,
     print(f"System time: {datetime.datetime.now()}")
 
     # Convert the JSON object to a string
-    json_string = json.dumps(qrcodeDocument)
+    json_string = json.dumps(qrcodeDocument, separators=(',', ':'))
 
     print(json_string)
     print(f"s3_key: {s3_key}, bucket : {s3Bucket} with data: {json_string}")
