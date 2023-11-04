@@ -109,7 +109,7 @@ class PharmaAPIQRCode(Document):
                 for item in sscc_details:
                     # Assuming you want to print the details of each 'PharmaSSCCItem'
 
-                    pharmaSSCItem = frappe.get_doc("PharmaSSCCItem")
+                    pharmaSSCItem = frappe.get_doc("Pharma SSCC Item")
                     print(pharmaSSCItem)
                     # If 'item' is a dict or has a method to represent itself as a string, 'print' will work as expected.
                     # If 'item' is a complex object, you might need to format the output, like:
