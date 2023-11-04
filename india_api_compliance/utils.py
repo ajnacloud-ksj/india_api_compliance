@@ -31,6 +31,8 @@ def get_app_config(key=None):
 
 
 def get_s3_client_using_access_keys():
+    access_key = get_app_config("s3_access_key")
+    print(f"AWS Key: {access_key}")
     s3_client = boto3.client(
         's3',
         aws_access_key_id=get_app_config("s3_access_key"),

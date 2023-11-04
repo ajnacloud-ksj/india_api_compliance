@@ -25,6 +25,7 @@ def capture_and_store_in_s3(qrcodeDocument,companyname):
     S3Prefix = get_app_config("s3_prefix")
     #sscc_number = qrcodeDocument['sscc_number']
     sscc_number = '123456789'
+    companyname = "ajna"
     s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
 
     s3_client = get_s3_client()
@@ -33,7 +34,7 @@ def capture_and_store_in_s3(qrcodeDocument,companyname):
     json_string = json.dumps(qrcodeDocument)
 
     print(json_string)
-    print(f"s3_key: {s3_key}, bucket : {s3Bucket}")
+    print(f"s3_key: {s3_key}, bucket : {s3Bucket} with data: {json_string}")
 
     
     # Upload the JSON string as a file-like object
