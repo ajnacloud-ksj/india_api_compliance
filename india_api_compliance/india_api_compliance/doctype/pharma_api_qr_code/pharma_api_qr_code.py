@@ -23,7 +23,8 @@ def capture_and_store_in_s3(qrcodeDocument,companyname):
 
     s3Bucket = get_app_config("s3_bucket")
     S3Prefix = get_app_config("s3_prefix")
-    sscc_number = qrcodeDocument['sscc_number']
+    #sscc_number = qrcodeDocument['sscc_number']
+    sscc_number = '123456789'
     s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
 
     s3_client = get_s3_client()
@@ -63,7 +64,7 @@ class PharmaAPIQRCode(Document):
             dd= dd +1
 
         if self.date_of_expiry_or_retest < self.date_of_manufacturing:
-            frappe.throw('Date of Expiration should not be less than Date of Manufacturing')
+            frappe.throw('Date of Expiration should not be less than Date of Manufacturing')    
 
 
     def on_submit(self):
@@ -92,13 +93,20 @@ class PharmaAPIQRCode(Document):
             qr_code_custom_fields = [field.strip() for field in (qr_code_custom_fields_string or '').split(',') if field.strip()]
 
 
-            extract_qr_fields = extract_fields(doc=self, fields= qr_code_mandatory_fields + qr_code_custom_fields)
-            
-            print(extract_qr_fields)
-            capture_and_store_in_s3(qrcodeDocument=extract_qr_fields, companyname=site_name)
+            #extract_qr_fields = extract_fields(doc=self, fields= qr_code_mandatory_fields + qr_code_custom_fields)
+            # Example usage:
+            extracted_data = extract_fields(doc=self, fields=qr_code_mandatory_fields + qr_code_custom_fields)
+            json_data = json.dumps(extracted_data, indent=4)
+            print(json_data)
+
+            print(extracted_data)
+            capture_and_store_in_s3(qrcodeDocument=extracted_data, companyname=site_name)
             frappe.db.commit()
 
     def on_cancel(self):
         for i in self.sscc_details:
             frappe.db.set_value('Pharma Container Code',i.container_code , {'status': "Not Used"})
             frappe.db.commit()
+
+
+    

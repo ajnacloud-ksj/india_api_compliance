@@ -40,7 +40,30 @@ def get_s3_client_using_access_keys():
     return s3_client
 
 
+def serialize_custom_object(custom_object):
+    # Implement this function to convert your custom objects to a serializable format.
+    # For example:
+        return {
+            'id': custom_object.id,
+            'docstatus': custom_object.docstatus,
+            'parent': custom_object.parent
+        }
+
+def extract_fields(doc, fields):
+        """Extract the specified fields from the document"""
+        data = {}
+        for field in fields:
+            value = doc.get(field)
+            # Check if value is a list and if items in the list are custom objects
+            if isinstance(value, list) and value and hasattr(value[0], 'docstatus'):
+                # Convert each custom object to a dict
+                value = [serialize_custom_object(item) for item in value]
+            data[field] = value
+        return data    
+
+'''
 def extract_fields(doc, fields):
     """Extract the specified fields from the document"""
     data = {field: doc.get(field) for field in fields}
     return data
+'''
