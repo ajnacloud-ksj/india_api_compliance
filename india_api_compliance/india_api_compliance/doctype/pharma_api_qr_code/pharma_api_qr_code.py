@@ -110,8 +110,18 @@ class PharmaAPIQRCode(Document):
                     # Assuming you want to print the details of each 'PharmaSSCCItem'
 
                     pharmaSSCItem = frappe.get_doc("Pharma SSCC Item",sscc_item.name ).as_dict()
+                    data = {
+                            "container_code": pharmaSSCItem['container_code'],
+                            "net_weight": pharmaSSCItem['net_weight'],
+                            "tare_weight": pharmaSSCItem['tare_weight'],
+                            "gross_weight": pharmaSSCItem['gross_weight'],
+                            "batch_number": pharmaSSCItem['batch_number'],
+                            "unit_of_measurement": pharmaSSCItem['unit_of_measurement']
+                    }
+
+                    print(data)
                     print(pharmaSSCItem)
-                    full_sscc_details.append(pharmaSSCItem)
+                    full_sscc_details.append(data)
                     # If 'item' is a dict or has a method to represent itself as a string, 'print' will work as expected.
                     # If 'item' is a complex object, you might need to format the output, like:
                     # print(item.field1, item.field2, ...)  # Replace with actual fields of 'PharmaSSCCItem'
