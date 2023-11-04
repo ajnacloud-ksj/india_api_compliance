@@ -13,7 +13,7 @@ from india_api_compliance.utils import get_app_config,extract_fields,get_s3_clie
 
 
 def capture_and_store_in_s3(qrcodeDocument,companyname, s3_client):
-
+    print(qrcodeDocument)
     s3Bucket = get_app_config("s3_bucket")
     S3Prefix = get_app_config("s3_prefix")
     sscc_number = qrcodeDocument['container_code']
