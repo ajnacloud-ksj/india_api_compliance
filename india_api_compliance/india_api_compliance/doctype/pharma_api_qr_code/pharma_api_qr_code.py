@@ -32,6 +32,9 @@ def capture_and_store_in_s3(qrcodeDocument,companyname):
     # Convert the JSON object to a string
     json_string = json.dumps(qrcodeDocument)
 
+    print(json_string)
+    print(f"s3_key: {s3_key}, bucket : {s3Bucket}")
+
     
     # Upload the JSON string as a file-like object
     s3_client.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
