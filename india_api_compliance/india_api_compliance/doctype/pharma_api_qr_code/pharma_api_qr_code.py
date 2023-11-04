@@ -101,21 +101,25 @@ class PharmaAPIQRCode(Document):
             # Extract the 'sscc_details' and remove it from 'extracted_data'
             sscc_details = extracted_data.pop('sscc_details', None)
 
-
+            full_sscc_details = []
 
             # Check if 'sscc_details' is not None
             if sscc_details is not None:
                 # Iterate over each item in 'sscc_details'
-                for item in sscc_details:
+                for sscc_item in sscc_details:
                     # Assuming you want to print the details of each 'PharmaSSCCItem'
 
-                    pharmaSSCItem = frappe.get_doc("Pharma SSCC Item")
+                    pharmaSSCItem = frappe.get_doc("Pharma SSCC Item",sscc_item.name ).as_dict()
                     print(pharmaSSCItem)
+                    full_sscc_details.append(pharmaSSCItem)
                     # If 'item' is a dict or has a method to represent itself as a string, 'print' will work as expected.
                     # If 'item' is a complex object, you might need to format the output, like:
                     # print(item.field1, item.field2, ...)  # Replace with actual fields of 'PharmaSSCCItem'
             else:
                 print("No SSCC details found.")
+
+            # Now replace the 'sscc_details' with full details
+            extracted_data['sscc_details'] = full_sscc_details    
 
             json_data = json.dumps(extracted_data, indent=4)
             print(json_data)
