@@ -6,6 +6,7 @@ from frappe.model.document import Document
 from frappe import local
 import boto3
 import json 
+import datetime 
 
 from india_api_compliance.utils import get_app_config,extract_fields,get_s3_client_using_access_keys
 
@@ -27,6 +28,7 @@ def capture_and_store_in_s3(qrcodeDocument,companyname):
     sscc_number = '123456789'
     companyname = "ajna"
     s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
+    print(f"System time: {datetime.datetime.now()}")
 
     s3_client = get_s3_client()
 
@@ -36,9 +38,14 @@ def capture_and_store_in_s3(qrcodeDocument,companyname):
     print(json_string)
     print(f"s3_key: {s3_key}, bucket : {s3Bucket} with data: {json_string}")
 
-    
+    s3_client_1 = boto3.client(
+    's3',
+    aws_access_key_id='AKIA3YP74CIXLTZTIHF4',
+    aws_secret_access_key='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',
+    region_name='ap-south-1'
+)
     # Upload the JSON string as a file-like object
-    s3_client.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
+    s3_client_1.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
 
 class PharmaAPIQRCode(Document):
     def validate(self):
