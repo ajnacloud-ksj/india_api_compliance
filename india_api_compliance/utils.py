@@ -5,6 +5,7 @@ import base64
 from io import BytesIO
 import boto3
 import json 
+from frappe.exceptions import DoesNotExistError
 
 @frappe.whitelist()
 def generate_qr_base64(data):
@@ -16,16 +17,19 @@ def generate_qr_base64(data):
 
 def get_app_config(key=None):
     try:
-        # Assuming there's only one record for App Configuration
+        # Fetching the Singleton Doctype
         config = frappe.get_doc("India Api Compliance Configuration")
-        print(json.dumps(config))
+        # Printing the entire config as JSON
+        print(json.dumps(config.as_dict()))
         print("Fetching the config")
-        print(config)
+        # If a specific key is requested, return its value
         print(f"Looking for key {key}")
         if key:
             return getattr(config, key, None)
+        # If no key is specified, return the whole config
         return config
-    except frappe.DoesNotExistError:
+    except DoesNotExistError:
+        # Return None if the Doctype does not exist
         return None
 
 
