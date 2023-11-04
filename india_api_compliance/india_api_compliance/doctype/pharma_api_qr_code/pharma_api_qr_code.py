@@ -96,6 +96,7 @@ class PharmaAPIQRCode(Document):
             #extract_qr_fields = extract_fields(doc=self, fields= qr_code_mandatory_fields + qr_code_custom_fields)
             # Example usage:
             extracted_data = extract_fields(doc=self, fields=qr_code_mandatory_fields + qr_code_custom_fields)
+            print(extracted_data)
             json_data = json.dumps(extracted_data, indent=4)
             print(json_data)
 
