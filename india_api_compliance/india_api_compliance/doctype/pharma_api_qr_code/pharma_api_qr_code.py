@@ -95,11 +95,27 @@ class PharmaAPIQRCode(Document):
 
             #extract_qr_fields = extract_fields(doc=self, fields= qr_code_mandatory_fields + qr_code_custom_fields)
             # Example usage:
-            extracted_data = extract_fields(doc=self, fields=qr_code_mandatory_fields + qr_code_custom_fields)
+            extracted_data = extract_fields(doc=self, fields=qr_code_mandatory_fields)
             print(extracted_data)
             
-            for item in extracted_data['sscc_details']:
-                print(item)
+            # Extract the 'sscc_details' and remove it from 'extracted_data'
+            sscc_details = extracted_data.pop('sscc_details', None)
+
+
+
+            # Check if 'sscc_details' is not None
+            if sscc_details is not None:
+                # Iterate over each item in 'sscc_details'
+                for item in sscc_details:
+                    # Assuming you want to print the details of each 'PharmaSSCCItem'
+
+                    pharmaSSCItem = frappe.get_doc("PharmaSSCCItem")
+                    print(pharmaSSCItem)
+                    # If 'item' is a dict or has a method to represent itself as a string, 'print' will work as expected.
+                    # If 'item' is a complex object, you might need to format the output, like:
+                    # print(item.field1, item.field2, ...)  # Replace with actual fields of 'PharmaSSCCItem'
+            else:
+                print("No SSCC details found.")
 
             json_data = json.dumps(extracted_data, indent=4)
             print(json_data)
