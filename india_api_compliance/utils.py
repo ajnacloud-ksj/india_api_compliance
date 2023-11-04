@@ -48,7 +48,7 @@ def serialize_custom_object(custom_object):
             'docstatus': custom_object.docstatus,
             'parent': custom_object.parent
         }
-
+'''
 def extract_fields(doc, fields):
         """Extract the specified fields from the document"""
         data = {}
@@ -62,8 +62,9 @@ def extract_fields(doc, fields):
         return data    
 
 '''
+
 def extract_fields(doc, fields):
     """Extract the specified fields from the document"""
     data = {field: doc.get(field) for field in fields}
     return data
-'''
+
