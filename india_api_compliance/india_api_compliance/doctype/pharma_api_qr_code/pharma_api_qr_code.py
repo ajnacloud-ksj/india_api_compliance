@@ -85,11 +85,14 @@ class PharmaAPIQRCode(Document):
 
             site_name = local.site
 
-            qr_code_mandatory_fields_string =  get_app_config(key='mandatory_fields') 
-            qr_code_custom_fields_string =  get_app_config(key='custom_fields') 
+            qr_code_mandatory_fields_string = get_app_config(key='mandatory_fields')
+            qr_code_custom_fields_string = get_app_config(key='custom_fields')
 
-            qr_code_mandatory_fields = [field.strip() for field in qr_code_mandatory_fields_string.split(',')]
-            qr_code_custom_fields = [field.strip() for field in qr_code_custom_fields_string.split(',')]
+            # Use a default empty string if the value is None before splitting
+            # and filter out any empty strings after splitting
+            qr_code_mandatory_fields = [field.strip() for field in (qr_code_mandatory_fields_string or '').split(',') if field.strip()]
+            qr_code_custom_fields = [field.strip() for field in (qr_code_custom_fields_string or '').split(',') if field.strip()]
+
 
             extract_qr_fields = extract_fields(doc=self, fields= qr_code_mandatory_fields + qr_code_custom_fields)
             
