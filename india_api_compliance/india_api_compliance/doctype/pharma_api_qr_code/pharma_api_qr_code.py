@@ -12,7 +12,7 @@ from india_api_compliance.utils import get_app_config,extract_fields,get_s3_clie
 
 def get_s3_client():
     useS3AccessKeys= get_app_config("use_access_keys")
-    if not useS3AccessKeys:
+    if useS3AccessKeys:
         print("Using S3 access keys to initialize the S3 client")
         return get_s3_client_using_access_keys()
     else: 
