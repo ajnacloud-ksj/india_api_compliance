@@ -12,8 +12,8 @@ from india_api_compliance.utils import get_app_config,extract_fields,get_s3_clie
 
 def capture_and_store_in_s3_old(qrcodeDocument,
                             companyname,
-                            sscc_number,
-                            s3_client):
+                            sscc_number):
+    s3_client = get_s3_client()
     
     s3Bucket = get_app_config("s3_bucket")
     S3Prefix = get_app_config("s3_prefix")
@@ -138,8 +138,7 @@ class PharmaAPIQRCode(Document):
                 frappe.enqueue('india_api_compliance.india_api_compliance.doctype.pharma_api_qr_code.capture_and_store_in_s3', 
                         qrcodeDocument=json.dumps(data, indent=4),
                         companyname=site_name,
-                        sscc_number=data['container_code'],
-                        s3_client=s3client)
+                        sscc_number=data['container_code'])
             frappe.db.commit()
 
 
