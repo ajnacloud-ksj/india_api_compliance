@@ -7,16 +7,14 @@ from frappe import local
 import boto3
 import json 
 import datetime 
-
 from india_api_compliance.utils import get_app_config,extract_fields,get_s3_client
 
 
-
-def capture_and_store_in_s3(qrcodeDocument,
+def capture_and_store_in_s3_old(qrcodeDocument,
                             companyname,
                             sscc_number,
                             s3_client):
-    print(qrcodeDocument)
+    
     s3Bucket = get_app_config("s3_bucket")
     S3Prefix = get_app_config("s3_prefix")
     s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
@@ -32,114 +30,133 @@ def capture_and_store_in_s3(qrcodeDocument,
     s3_client.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
 
 class PharmaAPIQRCode(Document):
-    def validate(self):
+
+    def validate_container_count(self):
         if int(self.number_of_containers) >= 500:
-            frappe.throw('Container Code should be less then 500')
-        dd = 0
-        for i in range(0,int(self.number_of_containers)):
-            try:
-                cu = self.sscc_details[dd]
-                if not cu.container_code:
-                    frappe.msgprint(f'no container {cu}')
-                    cc =frappe.get_doc({'doctype': 'Pharma Container Code'})
-                    cc.status = 'Used'
-                    cc.unit_value =self.unit_value
-                    cc.save()
-                    frappe.db.commit()
-                    cu.container_code = cc.name
-                cu.gross_weight = cu.net_weight + cu.tare_weight
-            except IndexError:
-                row=self.append('sscc_details',{})
-                cc =frappe.get_doc({'doctype': 'Pharma Container Code'})
-                cc.status = 'Used'
-                cc.unit_value =self.unit_value
-                cc.save()
-                frappe.db.commit()
-                row.container_code = cc.name
-            dd= dd +1
+            frappe.throw(_('Container Code should be less than 500'))
 
+    def validate_dates(self):
         if self.date_of_expiry_or_retest < self.date_of_manufacturing:
-            frappe.throw('Date of Expiration should not be less than Date of Manufacturing')    
+            frappe.throw(_('Date of Expiration should not be less than Date of Manufacturing'))
 
+    def process_container_codes(self):
+        # Pre-fetch unit value and unused container codes to minimize database queries
+        unit_value = self.unit_value
+        unused_container_codes = self.get_unused_container_codes(int(self.number_of_containers))
+
+        for idx, container_detail in enumerate(self.get_container_details()):
+            container_code = unused_container_codes[idx]
+            self.set_container_code(container_detail, container_code, unit_value)
+
+        # Update database in a single transaction for performance and atomicity
+        self.bulk_update_container_codes(unused_container_codes)
+
+    def get_container_details(self):
+        # Ensure there's a container detail object for each required container
+        while len(self.sscc_details) < int(self.number_of_containers):
+            self.append('sscc_details', {})
+        return self.sscc_details
+
+    def get_unused_container_codes(self, count):
+        # Fetch unused container codes in bulk for efficiency
+        return frappe.get_list('Pharma Container Code', 
+                               filters={'status': 'Not Used'}, 
+                               fields=['name'],
+                               limit=count)
+
+    def set_container_code(self, container_detail, container_code, unit_value):
+        # Assign container code and calculate gross weight
+        if not container_detail.container_code:
+            container_detail.container_code = container_code['name']
+        container_detail.gross_weight = container_detail.net_weight + container_detail.tare_weight
+        # Flag container code as used
+        container_code['status'] = 'Used'
+        container_code['unit_value'] = unit_value
+
+    def bulk_update_container_codes(self, unused_container_codes):
+        # Perform a bulk update to commit changes to all container codes
+        names = [code['name'] for code in unused_container_codes]
+        frappe.db.sql("""UPDATE `tabPharma Container Code` SET status = 'Used', unit_value = %s 
+                         WHERE name IN (%s)""", (self.unit_value, ', '.join(['%s'] * len(names))), tuple(names))
+  
+    def validate_weights(item):
+        if item.net_weight == 0.0:
+            frappe.throw(f'Net Weight at index {item.idx} cannot be zero')
+        if item.tare_weight == 0.0:
+            frappe.throw(f'Tare Weight at index {item.idx} cannot be zero')
+        if item.gross_weight == 0.0:
+            frappe.throw(f'Gross Weight at index {item.idx} cannot be zero')
+
+    def clear_qr_code_field(item):
+        if item.qr_code:
+            frappe.delete_doc('File', {'file_url': item.qr_code})
+            item.qr_code = ''
+
+    def get_qr_code_fields():
+        qr_code_mandatory_fields_string = get_app_config(key='mandatory_fields')
+        qr_code_custom_fields_string = get_app_config(key='custom_fields')
+        
+        qr_code_mandatory_fields = [field.strip() for field in (qr_code_mandatory_fields_string or '').split(',') if field.strip()]
+        qr_code_custom_fields = [field.strip() for field in (qr_code_custom_fields_string or '').split(',') if field.strip()]
+        
+        return qr_code_mandatory_fields, qr_code_custom_fields
+
+    def extract_full_sscc_details(doc, extracted_data):
+        sscc_details = extracted_data.pop('sscc_details', None)
+        full_sscc_details = []
+        
+        if sscc_details:
+            for sscc_item in sscc_details:
+                pharmaSSCItem = frappe.get_doc("Pharma SSCC Item", sscc_item.name).as_dict()
+                data = pharmaSSCItem.copy()
+                data.update(extracted_data)  
+                full_sscc_details.append(data)
+        else:
+            frappe.log_error("No SSCC details found.", 'SSCC Extraction Error')
+
+        return full_sscc_details
+
+    @frappe.whitelist()
+    def capture_and_store_in_s3(qrcodeDocument, companyname, sscc_number, s3_client):
+        s3Bucket = get_app_config("s3_bucket")
+        S3Prefix = get_app_config("s3_prefix")
+        s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
+
+        frappe.logger().info(f"Uploading to S3: {s3_key}")
+
+        try:
+            s3_client.put_object(Body=qrcodeDocument, Bucket=s3Bucket, Key=s3_key)
+        except Exception as e:
+            frappe.log_error(f"Failed to upload to S3: {e}", 'S3 Upload Error')
+
+
+    def validate(self):
+        self.validate_container_count()
+        self.validate_dates()
+        self.process_container_codes()
 
     def on_submit(self):
         s3client = get_s3_client()
         for i in self.sscc_details:
-            if i.net_weight == 0.0:
-                frappe.throw(f'Net Weight at index {i.idx} could not be zero')
-            if i.tare_weight == 0.0:
-                frappe.throw(f'Tare Weight at index {i.idx} could not be zero')
-            if i.gross_weight == 0.0:
-                frappe.throw(f'Gross Weight at index {i.idx} could not be zero')
-            if i.qr_code:
-                frappe.delete_doc('File', {'file_url':i.qr_code})
-                i.qr_code = ''
+           self.validate_weights(i)
+           self.clear_qr_code_field(i)
 
-            fname = f"{self.product_code}{i.name}".replace("#","").replace("/","").replace(" ","")
-            import re
+        site_name = frappe.local.site
+        qr_code_mandatory_fields, qr_code_custom_fields = self.get_qr_code_fields()
 
-            site_name = local.site
+        extracted_data = extract_fields(doc=self, fields=qr_code_mandatory_fields)
 
-            qr_code_mandatory_fields_string = get_app_config(key='mandatory_fields')
-            qr_code_custom_fields_string = get_app_config(key='custom_fields')
-
-            # Use a default empty string if the value is None before splitting
-            # and filter out any empty strings after splitting
-            qr_code_mandatory_fields = [field.strip() for field in (qr_code_mandatory_fields_string or '').split(',') if field.strip()]
-            qr_code_custom_fields = [field.strip() for field in (qr_code_custom_fields_string or '').split(',') if field.strip()]
-
-
-            #extract_qr_fields = extract_fields(doc=self, fields= qr_code_mandatory_fields + qr_code_custom_fields)
-            # Example usage:
-            extracted_data = extract_fields(doc=self, fields=qr_code_mandatory_fields)
-            print(extracted_data)
-            
-            # Extract the 'sscc_details' and remove it from 'extracted_data'
-            sscc_details = extracted_data.pop('sscc_details', None)
-
-            full_sscc_details = []
-
-            # Check if 'sscc_details' is not None
-            if sscc_details is not None:
-                # Iterate over each item in 'sscc_details'
-                for sscc_item in sscc_details:
-                    # Assuming you want to print the details of each 'PharmaSSCCItem'
-
-                    pharmaSSCItem = frappe.get_doc("Pharma SSCC Item",sscc_item.name ).as_dict()
-                    data = {
-                            "container_code": pharmaSSCItem['container_code'],
-                            "net_weight": pharmaSSCItem['net_weight'],
-                            "tare_weight": pharmaSSCItem['tare_weight'],
-                            "gross_weight": pharmaSSCItem['gross_weight'],
-                            "batch_number": pharmaSSCItem['batch_number'],
-                            "unit_of_measurement": pharmaSSCItem['unit_of_measurement']
-                    }
-
-                    #print(data)
-                    #print(pharmaSSCItem)
-                     # Now replace the 'sscc_details' with full details
-
-                    print("Before update")
-                    print(data)
-                    data.update(extracted_data)  
-                    print("After update")
-                    print(data)
-                    full_sscc_details.append(data)
+        full_sscc_details = self.extract_full_sscc_details(self, extracted_data)
         
-                    # If 'item' is a dict or has a method to represent itself as a string, 'print' will work as expected.
-                    # If 'item' is a complex object, you might need to format the output, like:
-                    # print(item.field1, item.field2, ...)  # Replace with actual fields of 'PharmaSSCCItem'
-            else:
-                print("No SSCC details found.")
-            for data in full_sscc_details: 
-                sscc_number = data['container_code']
-                json_data = json.dumps(data, indent=4)
-                print(json_data)
-                capture_and_store_in_s3(qrcodeDocument=json_data, 
-                                        companyname=site_name,
-                                        sscc_number=sscc_number,
-                                        s3_client=s3client)
-            frappe.db.commit()
+        for data in full_sscc_details:
+            frappe.enqueue('india_api_compliance.india_api_compliance.doctype.pharma_api_qr_code.capture_and_store_in_s3', 
+                        qrcodeDocument=json.dumps(data, indent=4),
+                        companyname=site_name,
+                        sscc_number=data['container_code'],
+                        s3_client=s3client)
+
+        frappe.db.commit()
+
 
     def on_cancel(self):
         for i in self.sscc_details:
