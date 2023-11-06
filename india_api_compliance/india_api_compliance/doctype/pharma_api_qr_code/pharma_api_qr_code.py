@@ -29,21 +29,21 @@ def capture_and_store_in_s3_old(qrcodeDocument,
     # Upload the JSON string as a file-like object
     s3_client.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
 
+@frappe.whitelist()
+def capture_and_store_in_s3(qrcodeDocument, companyname, sscc_number, s3_client):
+    s3Bucket = get_app_config("s3_bucket")
+    S3Prefix = get_app_config("s3_prefix")
+    s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
+
+    frappe.logger().info(f"Uploading to S3: {s3_key}")
+
+    try:
+        s3_client.put_object(Body=qrcodeDocument, Bucket=s3Bucket, Key=s3_key)
+    except Exception as e:
+        frappe.log_error(f"Failed to upload to S3: {e}", 'S3 Upload Error')
+
+
 class PharmaAPIQRCode(Document):
-
-    
-    @frappe.whitelist()
-    def capture_and_store_in_s3(qrcodeDocument, companyname, sscc_number, s3_client):
-        s3Bucket = get_app_config("s3_bucket")
-        S3Prefix = get_app_config("s3_prefix")
-        s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
-
-        frappe.logger().info(f"Uploading to S3: {s3_key}")
-
-        try:
-            s3_client.put_object(Body=qrcodeDocument, Bucket=s3Bucket, Key=s3_key)
-        except Exception as e:
-            frappe.log_error(f"Failed to upload to S3: {e}", 'S3 Upload Error')
 
 
     def validate(self):
