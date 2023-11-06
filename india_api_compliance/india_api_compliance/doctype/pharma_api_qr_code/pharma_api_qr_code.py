@@ -30,7 +30,8 @@ def capture_and_store_in_s3_old(qrcodeDocument,
     s3_client.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
 
 @frappe.whitelist()
-def capture_and_store_in_s3(qrcodeDocument, companyname, sscc_number, s3_client):
+def capture_and_store_in_s3(qrcodeDocument, companyname, sscc_number):
+    s3_client = get_s3_client()
     s3Bucket = get_app_config("s3_bucket")
     S3Prefix = get_app_config("s3_prefix")
     s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
