@@ -135,7 +135,7 @@ class PharmaAPIQRCode(Document):
                 sscc_number = data['container_code']
                 json_data = json.dumps(data, indent=4)
                 print(json_data)
-                frappe.enqueue('india_api_compliance.india_api_compliance.doctype.pharma_api_qr_code.capture_and_store_in_s3', 
+                frappe.enqueue('india_api_compliance.india_api_compliance.doctype.pharma_api_qr_code.pharma_api_qr_code.capture_and_store_in_s3', 
                         qrcodeDocument=json.dumps(data, indent=4),
                         companyname=site_name,
                         sscc_number=data['container_code'])
