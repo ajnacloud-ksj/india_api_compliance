@@ -40,23 +40,6 @@ def create_roles():
                 'desk_access': 1
             }).insert()
 
-def set_permissions():
-    doctype = 'Pharma API QR Code'
-
-    # Example permissions, adjust as required
-   # For QA User
-    frappe.permissions.add_permission(doctype, 'QA User', ptype='read')
-    frappe.permissions.add_permission(doctype, 'QA User', ptype='write')
-
-    # For QA Reviewer
-    frappe.permissions.add_permission(doctype, 'QA Reviewer', ptype='read')
-    frappe.permissions.add_permission(doctype, 'QA Reviewer', ptype='write')
-
-    # For QA Approver
-    frappe.permissions.add_permission(doctype, 'QA Approver', ptype='read')
-    frappe.permissions.add_permission(doctype, 'QA Approver', ptype='write')
-    frappe.permissions.add_permission(doctype, 'QA Approver', ptype='submit')
-
 
 def before_uninstall():
     # Cleanup roles and permissions

@@ -50,7 +50,8 @@
   "sscc_details",
   "naming_series",
   "amended_from",
-  "workflow_state"
+  "workflow_state",
+  "s3_upload_status"
  ],
  "fields": [
   {
@@ -324,12 +325,20 @@
    "fieldtype": "Link",
    "label": "Workflow State",
    "options": "Workflow State"
+  },
+  {
+   "default": "Failed",
+   "fieldname": "s3_upload_status",
+   "fieldtype": "Data",
+   "label": "S3 Upload Status",
+   "options": "Started\nCompleted\nFailed",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-10-21 11:34:44.750126",
+ "modified": "2023-11-14 13:07:32.749883",
  "modified_by": "Administrator",
  "module": "India Api Compliance",
  "name": "Pharma API QR Code",
@@ -346,6 +355,41 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "QA User",
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "QA Approver",
+   "select": 1,
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "QA Reviewer",
+   "select": 1,
+   "submit": 1,
    "write": 1
   }
  ],

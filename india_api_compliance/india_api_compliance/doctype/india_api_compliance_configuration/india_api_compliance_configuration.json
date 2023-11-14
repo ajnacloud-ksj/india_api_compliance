@@ -96,7 +96,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-11-03 03:15:30.149664",
+ "modified": "2023-11-14 13:09:09.516714",
  "modified_by": "Administrator",
  "module": "India Api Compliance",
  "name": "India Api Compliance Configuration",
@@ -110,6 +110,13 @@
    "read": 1,
    "role": "System Manager",
    "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "QA Approver",
+   "select": 1,
    "write": 1
   }
  ],

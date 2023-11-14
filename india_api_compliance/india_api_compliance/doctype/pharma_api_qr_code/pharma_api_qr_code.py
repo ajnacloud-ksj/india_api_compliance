@@ -7,41 +7,71 @@ from frappe import local
 import boto3
 import json 
 import datetime 
+import re
 from india_api_compliance.utils import get_app_config,extract_fields,get_s3_client
 
 
-def capture_and_store_in_s3_old(qrcodeDocument,
-                            companyname,
-                            sscc_number):
-    s3_client = get_s3_client()
-    
-    s3Bucket = get_app_config("s3_bucket")
-    S3Prefix = get_app_config("s3_prefix")
-    s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
-    print(f"System time: {datetime.datetime.now()}")
-
-    # Convert the JSON object to a string
-    json_string = json.dumps(qrcodeDocument, separators=(',', ':'))
-
-    print(json_string)
-    print(f"s3_key: {s3_key}, bucket : {s3Bucket} with data: {json_string}")
-
-    # Upload the JSON string as a file-like object
-    s3_client.put_object(Body=json_string, Bucket=s3Bucket, Key=s3_key)
+@frappe.whitelist()
+def add_tag_to_document(docname, tag):
+    tag_doc = frappe.get_doc({
+        'doctype': 'Tag Link',
+        'tag': tag,
+        'document_type': 'Pharma API QR Code',
+        'document_name': docname
+    })
+    tag_doc.insert(ignore_permissions=True)
 
 @frappe.whitelist()
-def capture_and_store_in_s3(qrcodeDocument, companyname, sscc_number):
+def post_comment_on_document(docname, comment):
+    frappe.get_doc({
+        'doctype': 'Comment',
+        'comment_type': 'Comment',
+        'reference_doctype': 'Pharma API QR Code',
+        'reference_name': docname,
+        'content': comment
+    }).insert(ignore_permissions=True)
+
+@frappe.whitelist()
+def update_document_status(docname, status):
+    # Fetch the document using its name
+    doc = frappe.get_doc('Pharma API QR Code', docname)
+
+    # Update the status
+    doc.db_set('s3_upload_status', status)
+    frappe.db.commit()
+
+@frappe.whitelist()
+def capture_and_store_in_s3(qrcodeDocuments, 
+                            companyname,
+                            docname):
     s3_client = get_s3_client()
     s3Bucket = get_app_config("s3_bucket")
     S3Prefix = get_app_config("s3_prefix")
-    s3_key = f"{S3Prefix}/{companyname}/{sscc_number}.json"
+    print("Paramesh")
+    print(f'Paramesh qrcodelist type {type(qrcodeDocuments)}')
+    print(qrcodeDocuments)
+    docs = json.loads(qrcodeDocuments)
+    #docs = qrcodeDocuments
+    print(f"length of the array {len(docs)}")
 
-    frappe.logger().info(f"Uploading to S3: {s3_key}")
+    for doc in docs:
+        try: 
+            print(f'Paramesh doc type {type(doc)}')
+            print(doc)
+            sscc_number = doc['container_code']
+            s3_key = f"{S3Prefix}/companyname={companyname}/{sscc_number}.json"
 
-    try:
-        s3_client.put_object(Body=qrcodeDocument, Bucket=s3Bucket, Key=s3_key)
-    except Exception as e:
-        frappe.log_error(f"Failed to upload to S3: {e}", 'S3 Upload Error')
+            print(f"Paramesh S3 key {s3_key}")
+
+            frappe.logger().info(f"Uploading to S3: {s3_key}")
+            res = s3_client.put_object(Body=json.dumps(doc, indent=2), Bucket=s3Bucket, Key=s3_key)
+            print(f"Paramesh S3 upoload res {res}")
+            update_document_status(docname, "Completed")
+            #add_tag_to_document(docname, "S3 Uploaded")
+            #post_comment_on_document(docname, "Successfully uploaded to S3.")
+        except Exception as e:
+            frappe.log_error(f"Failed to upload to S3: {e}", 'S3 Upload Error') 
+            update_document_status(docname, "Failed")   
 
 
 class PharmaAPIQRCode(Document):
@@ -77,70 +107,53 @@ class PharmaAPIQRCode(Document):
             frappe.throw('Date of Expiration should not be less than Date of Manufacturing')   
 
     def on_submit(self):
-        s3client = get_s3_client()
-        for i in self.sscc_details:
-            if i.net_weight == 0.0:
-                frappe.throw(f'Net Weight at index {i.idx} could not be zero')
-            if i.tare_weight == 0.0:
-                frappe.throw(f'Tare Weight at index {i.idx} could not be zero')
-            if i.gross_weight == 0.0:
-                frappe.throw(f'Gross Weight at index {i.idx} could not be zero')
-            if i.qr_code:
-                frappe.delete_doc('File', {'file_url':i.qr_code})
-                i.qr_code = ''
+        full_sscc_details = []
+        site_name = local.site
+        qr_code_mandatory_fields_string = get_app_config(key='mandatory_fields')
+        qr_code_custom_fields_string = get_app_config(key='custom_fields')
+        # Use a default empty string if the value is None before splitting
+        # and filter out any empty strings after splitting
+        qr_code_mandatory_fields = [field.strip() for field in (qr_code_mandatory_fields_string or '').split(',') if field.strip()]
+        qr_code_custom_fields = [field.strip() for field in (qr_code_custom_fields_string or '').split(',') if field.strip()]
 
-            fname = f"{self.product_code}{i.name}".replace("#","").replace("/","").replace(" ","")
-            import re
-
-            site_name = local.site
-
-            qr_code_mandatory_fields_string = get_app_config(key='mandatory_fields')
-            qr_code_custom_fields_string = get_app_config(key='custom_fields')
-
-            # Use a default empty string if the value is None before splitting
-            # and filter out any empty strings after splitting
-            qr_code_mandatory_fields = [field.strip() for field in (qr_code_mandatory_fields_string or '').split(',') if field.strip()]
-            qr_code_custom_fields = [field.strip() for field in (qr_code_custom_fields_string or '').split(',') if field.strip()]
-
-
+        for sscc_detail in self.sscc_details:
+            if sscc_detail.net_weight == 0.0:
+                frappe.throw(f'Net Weight at index {sscc_detail.idx} could not be zero')
+            if sscc_detail.tare_weight == 0.0:
+                frappe.throw(f'Tare Weight at index {sscc_detail.idx} could not be zero')
+            if sscc_detail.gross_weight == 0.0:
+                frappe.throw(f'Gross Weight at index {sscc_detail.idx} could not be zero')
+            if sscc_detail.qr_code:
+                frappe.delete_doc('File', {'file_url':sscc_detail.qr_code})
+                sscc_detail.qr_code = ''
+            # Fetch the corresponding Pharma SSCC Item
+            pharmaSSCItem = frappe.get_doc("Pharma SSCC Item", sscc_detail.name).as_dict()
+            # Combine necessary fields
+            combined_data = {
+                "container_code": pharmaSSCItem.get('container_code'),
+                "net_weight": pharmaSSCItem.get('net_weight'),
+                "tare_weight": pharmaSSCItem.get('tare_weight'),
+                "gross_weight": pharmaSSCItem.get('gross_weight'),
+                "sscc_batch_number": pharmaSSCItem.get('batch_number'),
+                "sscc_unit_of_measurement": pharmaSSCItem.get('unit_of_measurement'),
+                # Add more fields as needed
+            }
             #extract_qr_fields = extract_fields(doc=self, fields= qr_code_mandatory_fields + qr_code_custom_fields)
-            # Example usage:
-            extracted_data = extract_fields(doc=self, fields=qr_code_mandatory_fields)
+            extracted_data = extract_fields(doc=self, fields=qr_code_mandatory_fields + qr_code_custom_fields)
             print(extracted_data)
-            
             # Extract the 'sscc_details' and remove it from 'extracted_data'
             sscc_details = extracted_data.pop('sscc_details', None)
 
-            full_sscc_details = []
-
-            # Check if 'sscc_details' is not None
-            if sscc_details is not None:
-                # Iterate over each item in 'sscc_details'
-                for sscc_item in sscc_details:
-                    # Assuming you want to print the details of each 'PharmaSSCCItem'
-
-                    pharmaSSCItem = frappe.get_doc("Pharma SSCC Item",sscc_item.name ).as_dict()
-                    data = {
-                            "container_code": pharmaSSCItem['container_code'],
-                            "net_weight": pharmaSSCItem['net_weight'],
-                            "tare_weight": pharmaSSCItem['tare_weight'],
-                            "gross_weight": pharmaSSCItem['gross_weight'],
-                            "batch_number": pharmaSSCItem['batch_number'],
-                            "unit_of_measurement": pharmaSSCItem['unit_of_measurement']
-                    }
-                    data.update(extracted_data)  
-                    full_sscc_details.append(data)
-            else:
-                print("No SSCC details found.")
-            for data in full_sscc_details: 
-                sscc_number = data['container_code']
-                json_data = json.dumps(data, indent=4)
-                print(json_data)
-                frappe.enqueue('india_api_compliance.india_api_compliance.doctype.pharma_api_qr_code.pharma_api_qr_code.capture_and_store_in_s3', 
-                        qrcodeDocument=json.dumps(data, indent=4),
+            combined_data.update(extracted_data)  
+            full_sscc_details.append(combined_data)
+        
+        frappe.enqueue('india_api_compliance.india_api_compliance.doctype.pharma_api_qr_code.pharma_api_qr_code.capture_and_store_in_s3', 
+                        qrcodeDocuments=json.dumps(full_sscc_details, indent=4),
                         companyname=site_name,
-                        sscc_number=data['container_code'])
-            frappe.db.commit()
+                        docname=self.name)              
+        # capture_and_store_in_s3(full_sscc_details,site_name,self.name)
+        update_document_status(self.name, "Started") 
+        frappe.db.commit()
 
 
     def on_cancel(self):
