@@ -1,0 +1,24 @@
+{
+ "cards": [],
+ "charts": [
+  {
+   "width": "Half"
+  },
+  {
+   "chart": "Total QR Code Generated",
+   "width": "Half"
+  }
+ ],
+ "creation": "2023-11-14 13:17:25.514697",
+ "dashboard_name": "India Pharma Compliance",
+ "docstatus": 0,
+ "doctype": "Dashboard",
+ "idx": 0,
+ "is_default": 1,
+ "is_standard": 1,
+ "modified": "2023-11-14 13:20:17.533662",
+ "modified_by": "Administrator",
+ "module": "India Api Compliance",
+ "name": "India Pharma Compliance",
+ "owner": "Administrator"
+}
