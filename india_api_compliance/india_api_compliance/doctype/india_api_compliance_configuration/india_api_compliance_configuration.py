@@ -6,4 +6,6 @@ from frappe.model.document import Document
 
 
 class IndiaApiComplianceConfiguration(Document):
-	pass
+
+	def on_save(self):
+		print("Configuration saved successfully...")
