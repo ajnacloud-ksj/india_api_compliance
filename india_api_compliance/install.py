@@ -40,11 +40,21 @@ def create_roles():
                 'desk_access': 1
             }).insert()
 
+def remove_custom_workspace(workspace_name):
+    # Check if the workspace exists
+    if frappe.db.exists('Workspace', workspace_name):
+        # Get the document
+        workspace_doc = frappe.get_doc('Workspace', workspace_name)
+
+        # Delete the workspace
+        workspace_doc.delete()
+    frappe.db.commit()
 
 def before_uninstall():
     # Cleanup roles and permissions
     #remove_permissions()
     #remove_roles()
+    remove_custom_workspace('India Compliance')
     remove_custom_print_formats()
 
 

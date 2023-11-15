@@ -1,0 +1,29 @@
+{
+ "allow_roles": [
+  {
+   "role": "QA Approver"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "creation": "2023-11-14 15:47:17.484183",
+ "docstatus": 0,
+ "doctype": "Module Onboarding",
+ "documentation_url": "https://www.ajnaerp.com/",
+ "idx": 0,
+ "is_complete": 0,
+ "modified": "2023-11-14 15:47:17.484183",
+ "modified_by": "Administrator",
+ "module": "India Api Compliance",
+ "name": "India API Compliance",
+ "owner": "Administrator",
+ "steps": [
+  {
+   "step": "Naming Series"
+  }
+ ],
+ "subtitle": "API Compliance",
+ "success_message": "On boarding completed",
+ "title": "India API Compliance"
+}
