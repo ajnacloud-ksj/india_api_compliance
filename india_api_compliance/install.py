@@ -20,6 +20,7 @@ def create_workflow_action_master():
         'doctype': 'Workflow Action Master',
         'name': 'Cancel',
         'owner': 'Administrator',
+        'workflow_action_name': 'Cancel'
         'docstatus': 0
     })
     doc.insert()
