@@ -14,6 +14,25 @@ if not logger.hasHandlers():
 
 roles = ["QA User", "QA Reviewer", "QA Approver"]
 
+
+def create_workflow_action_master():
+    doc = frappe.get_doc({
+        'doctype': 'Workflow Action Master',
+        'name': 'Cancel',
+        'owner': 'Administrator',
+        'docstatus': 0
+    })
+    doc.insert()
+
+def create_workflow_state():
+    doc = frappe.get_doc({
+        'doctype': 'Workflow State',
+        'name': 'Cancelled',
+        'owner': 'Administrator',
+        'docstatus': 0
+    })
+    doc.insert()
+
 def remove_custom_print_formats():
     # Define a list of print formats that need to be removed
     print_formats_to_remove = ["API QRCode STD"]  # Add your print format names here
@@ -53,6 +72,11 @@ def remove_custom_html_blocks():
             doc.delete()
     frappe.db.commit()
 
+def delete_workflow_action_master():
+    frappe.delete_doc('Workflow Action Master', 'Cancel', ignore_missing=True)
+
+def delete_workflow_state():
+    frappe.delete_doc('Workflow State', 'Cancelled', ignore_missing=True)
 
 def create_custom_html_blocks():
     # Example data for Custom HTML Block
@@ -70,6 +94,8 @@ def after_install():
     # Create roles and set permissions
     create_roles()
     create_custom_html_blocks()
+    create_workflow_action_master()
+    create_workflow_state()
     #set_permissions()
 
 def create_roles():
@@ -98,6 +124,8 @@ def before_uninstall():
     remove_custom_workspace('India Compliance')
     remove_custom_print_formats()
     remove_custom_html_blocks()
+    delete_workflow_action_master()
+    delete_workflow_state()
 
 def remove_roles():
     roles = ["QA User", "QA Reviewer", "QA Approver"]
