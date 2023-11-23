@@ -30,7 +30,8 @@ def create_workflow_state():
         'doctype': 'Workflow State',
         'name': 'Cancelled',
         'owner': 'Administrator',
-        'docstatus': 0
+        'docstatus': 0,
+        'workflow_state_name': 'Cancelled'
     })
     doc.insert()
 
