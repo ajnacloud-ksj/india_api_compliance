@@ -3,6 +3,7 @@ import logging
 # Set up a logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)  # Set this to the desired level
+import json 
 
 # Ensure Frappe has been set up to log, or add a handler
 if not logger.hasHandlers():
@@ -14,8 +15,49 @@ if not logger.hasHandlers():
 
 roles = ["QA User", "QA Reviewer", "QA Approver"]
 
+def delete_workflow():
+    # Name of the workflow to be deleted
+    workflow_name = 'India API Compliance QRCode'
+
+    # Check if the workflow exists
+    if frappe.db.exists('Workflow', workflow_name):
+        # Delete the workflow
+        frappe.delete_doc('Workflow', workflow_name, force=1)
+
+
+def create_workflow_from_json():
+
+    # Assuming your JSON data is stored in a file 'workflow_data.json' within your app
+    json_path = frappe.get_app_path('india_api_compliance', 
+                                    'india_api_compliance', 
+                                    'workflow', 
+                                    'workflow.json')
+    
+    print(f"Json Path ${json_path}")
+    data = None 
+    with open(json_path, 'r') as file:
+        data = json.load(file)
+        
+    # Create the parent Workflow document
+    print("Creating the workflow...")
+    workflow_doc = frappe.new_doc('Workflow')
+    for key, value in data.items():
+        if key not in ['states', 'transitions']:
+            setattr(workflow_doc, key, value)
+
+    # Add states and transitions
+    for state in data.get('states', []):
+        workflow_doc.append('states', state)
+
+    for transition in data.get('transitions', []):
+        workflow_doc.append('transitions', transition)
+
+    # Insert the Workflow document into the database
+    workflow_doc.insert()
+
 
 def create_workflow_action_master():
+    print("Creating the workflow actions...")
     doc = frappe.get_doc({
         'doctype': 'Workflow Action Master',
         'name': 'Cancel',
@@ -26,6 +68,7 @@ def create_workflow_action_master():
     doc.insert()
 
 def create_workflow_state():
+    print("Creating the workflow state...")
     doc = frappe.get_doc({
         'doctype': 'Workflow State',
         'name': 'Cancelled',
@@ -98,6 +141,8 @@ def after_install():
     create_custom_html_blocks()
     create_workflow_action_master()
     create_workflow_state()
+    create_workflow_from_json()
+
     #set_permissions()
 
 def create_roles():
@@ -126,8 +171,10 @@ def before_uninstall():
     remove_custom_workspace('India Compliance')
     remove_custom_print_formats()
     remove_custom_html_blocks()
+    delete_workflow()
     delete_workflow_action_master()
     delete_workflow_state()
+   
 
 def remove_roles():
     roles = ["QA User", "QA Reviewer", "QA Approver"]
