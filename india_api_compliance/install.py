@@ -82,7 +82,7 @@ def create_workflow_state():
         'name': 'Draft',
         'owner': 'Administrator',
         'docstatus': 0,
-        'workflow_state_name': 'Cancelled'
+        'workflow_state_name': 'Draft'
     }).insert()
     frappe.db.commit()
 
