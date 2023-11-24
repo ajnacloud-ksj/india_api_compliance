@@ -66,17 +66,25 @@ def create_workflow_action_master():
         'docstatus': 0
     })
     doc.insert()
+    frappe.db.commit()
 
 def create_workflow_state():
     print("Creating the workflow state...")
-    doc = frappe.get_doc({
+    frappe.get_doc({
         'doctype': 'Workflow State',
         'name': 'Cancelled',
         'owner': 'Administrator',
         'docstatus': 0,
         'workflow_state_name': 'Cancelled'
-    })
-    doc.insert()
+    }).insert()
+    frappe.get_doc({
+        'doctype': 'Workflow State',
+        'name': 'Draft',
+        'owner': 'Administrator',
+        'docstatus': 0,
+        'workflow_state_name': 'Cancelled'
+    }).insert()
+    frappe.db.commit()
 
 def remove_custom_print_formats():
     # Define a list of print formats that need to be removed
@@ -122,6 +130,7 @@ def delete_workflow_action_master():
 
 def delete_workflow_state():
     frappe.delete_doc('Workflow State', 'Cancelled', ignore_missing=True)
+    frappe.delete_doc('Workflow State', 'Draft', ignore_missing=True)
 
 def create_custom_html_blocks():
     # Example data for Custom HTML Block
