@@ -30,6 +30,7 @@
   "column_break_hxsij",
   "date_format",
   "date_of_manufacturing",
+  "start_container_sequence",
   "column_break_matgg",
   "date_type",
   "date_of_expiry_or_retest",
@@ -307,6 +308,7 @@
   {
    "fieldname": "amended_from",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Amended From",
    "no_copy": 1,
    "options": "Pharma API QR Code",
@@ -323,6 +325,7 @@
   {
    "fieldname": "workflow_state",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Workflow State",
    "options": "Workflow State"
   },
@@ -333,12 +336,18 @@
    "label": "S3 Upload Status",
    "options": "Started\nCompleted\nFailed",
    "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "start_container_sequence",
+   "fieldtype": "Int",
+   "label": "Start Container Sequence"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-11-14 13:07:32.749883",
+ "modified": "2023-12-02 17:21:47.117876",
  "modified_by": "Administrator",
  "module": "India Api Compliance",
  "name": "Pharma API QR Code",

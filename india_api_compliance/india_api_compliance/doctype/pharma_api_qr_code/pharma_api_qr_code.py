@@ -75,7 +75,7 @@ def capture_and_store_in_s3(qrcodeDocuments,
 
 class CustomJSONEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, date):
+        if isinstance(obj, datetime.date):
             return obj.isoformat()  # Convert date to string
         return super().default(obj)
 
