@@ -73,6 +73,11 @@ def capture_and_store_in_s3(qrcodeDocuments,
             frappe.log_error(f"Failed to upload to S3: {e}", 'S3 Upload Error') 
             update_document_status(docname, "Failed")   
 
+class CustomJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, date):
+            return obj.isoformat()  # Convert date to string
+        return super().default(obj)
 
 class PharmaAPIQRCode(Document):
 
@@ -148,7 +153,7 @@ class PharmaAPIQRCode(Document):
             full_sscc_details.append(combined_data)
         
         frappe.enqueue('india_api_compliance.india_api_compliance.doctype.pharma_api_qr_code.pharma_api_qr_code.capture_and_store_in_s3', 
-                        qrcodeDocuments=json.dumps(full_sscc_details, indent=4),
+                        qrcodeDocuments=json.dumps(full_sscc_details, indent=4, cls=CustomJSONEncoder),
                         companyname=site_name,
                         docname=self.name)              
         # capture_and_store_in_s3(full_sscc_details,site_name,self.name)
