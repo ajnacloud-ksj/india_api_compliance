@@ -69,7 +69,7 @@
    "label": "Scan Display Attributes"
   },
   {
-   "default": "upc_number,product_name,brand_name,manufacturing_unit_address,sscc_details,special_storage_condition,",
+   "default": "upc_number,product_name,brand_name,name_of_manufacturer,manufacturing_unit_address,batch_number,batch_size,date_of_manufacturing,date_type,date_of_expiry_or_retest,manufacturing_license_number,sscc_details,special_storage_condition",
    "fieldname": "mandatory_fields",
    "fieldtype": "Small Text",
    "in_list_view": 1,
