@@ -106,6 +106,10 @@ class PharmaAPIQRCode(Document):
                 cc.save()
                 frappe.db.commit()
                 row.container_code = cc.name
+                row.net_weight = self.default_net_weight
+                row.tare_weight = self.default_tare_weight
+                row.gross_weight = row.net_weight + row.tare_weight
+                row.unit_of_measurement = self.default_unit_of_measurement
             dd= dd +1
 
         if self.date_of_expiry_or_retest < self.date_of_manufacturing:

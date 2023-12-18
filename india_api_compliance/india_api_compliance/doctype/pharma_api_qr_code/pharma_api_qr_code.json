@@ -26,14 +26,17 @@
   "batch_details_section",
   "batch_number",
   "batch_size",
+  "default_net_weight",
   "number_of_containers",
   "column_break_hxsij",
   "date_format",
   "date_of_manufacturing",
+  "default_tare_weight",
   "start_container_sequence",
   "column_break_matgg",
   "date_type",
   "date_of_expiry_or_retest",
+  "default_unit_of_measurement",
   "manufacturing_site_details_section",
   "manufacturing_unit",
   "unit_value",
@@ -342,12 +345,28 @@
    "fieldname": "start_container_sequence",
    "fieldtype": "Int",
    "label": "Start Container Sequence"
+  },
+  {
+   "fieldname": "default_net_weight",
+   "fieldtype": "Float",
+   "label": "Default Net Weight"
+  },
+  {
+   "fieldname": "default_tare_weight",
+   "fieldtype": "Float",
+   "label": "Default Tare Weight"
+  },
+  {
+   "default": "Kg",
+   "fieldname": "default_unit_of_measurement",
+   "fieldtype": "Data",
+   "label": "Default Unit Of Measurement"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-12-02 17:21:47.117876",
+ "modified": "2023-12-15 23:42:13.058234",
  "modified_by": "Administrator",
  "module": "India Api Compliance",
  "name": "Pharma API QR Code",
