@@ -196,7 +196,7 @@
    "fieldname": "date_format",
    "fieldtype": "Select",
    "label": "Date Format",
-   "options": "MMM YYYY\nMMM-YYYY\ndd-mm-YYYY\ndd/mm/YYYY"
+   "options": "mmm YYYY\nmmm-YYYY\ndd-mm-YYYY\ndd/mm/YYYY"
   },
   {
    "fieldname": "date_of_manufacturing",
@@ -366,7 +366,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-12-15 23:42:13.058234",
+ "modified": "2023-12-19 02:00:08.206345",
  "modified_by": "Administrator",
  "module": "India Api Compliance",
  "name": "Pharma API QR Code",

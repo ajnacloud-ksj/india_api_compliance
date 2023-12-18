@@ -69,7 +69,7 @@
    "label": "Scan Display Attributes"
   },
   {
-   "default": "upc_number,product_name,brand_name,name_of_manufacturer,manufacturing_unit_address,batch_number,batch_size,date_of_manufacturing,date_type,date_of_expiry_or_retest,manufacturing_license_number,sscc_details,special_storage_condition",
+   "default": "upc_number,product_name,brand_name,name_of_manufacturer,manufacturing_unit_address,batch_number,batch_size,date_of_manufacturing,date_type,date_of_expiry_or_retest,manufacturing_license_number,sscc_details,special_storage_condition,date_format",
    "fieldname": "mandatory_fields",
    "fieldtype": "Small Text",
    "in_list_view": 1,
@@ -96,7 +96,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-11-14 13:09:09.516714",
+ "modified": "2023-12-19 01:59:00.014045",
  "modified_by": "Administrator",
  "module": "India Api Compliance",
  "name": "India Api Compliance Configuration",
