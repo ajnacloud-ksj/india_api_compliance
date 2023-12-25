@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "autoname": "field:pharma_item_code",
  "creation": "2023-10-18 14:49:05.693749",
  "default_view": "List",
@@ -9,9 +10,10 @@
  "field_order": [
   "product_identifier_section",
   "pharma_item_code",
-  "product_description",
+  "hsn_code",
   "column_break_frwyg",
   "pharma_item_name",
+  "product_description",
   "product_details_section",
   "unique_product_code",
   "ndc_number",
@@ -129,11 +131,16 @@
    "fieldname": "brand_name",
    "fieldtype": "Data",
    "label": "Brand Name"
+  },
+  {
+   "fieldname": "hsn_code",
+   "fieldtype": "Data",
+   "label": "HSN Code"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-14 13:15:44.578203",
+ "modified": "2023-12-25 23:54:45.631349",
  "modified_by": "Administrator",
  "module": "India Api Compliance",
  "name": "Pharma Item",
